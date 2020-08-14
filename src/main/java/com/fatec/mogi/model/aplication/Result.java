@@ -11,7 +11,18 @@ import com.fatec.mogi.model.domain.DomainEntity;
 public class Result extends AplicationEntity {
 	private Map<String, String> messages;
 	private List<? extends DomainEntity> resultList;
-	private Boolean error;
+	private boolean error;
+
+	public Result() {
+	}
+	
+	
+	public Result(Map<String, String> messages, List<? extends DomainEntity> resultList, boolean error) {
+		this.messages = messages;
+		this.resultList = resultList;
+		this.error = error;
+	}
+
 
 	@SuppressWarnings("rawtypes")
 	public ResponseEntity buildResponse() {
@@ -39,11 +50,11 @@ public class Result extends AplicationEntity {
 		this.resultList = resultList;
 	}
 
-	public Boolean getError() {
+	public boolean getError() {
 		return error;
 	}
 
-	public void setError(Boolean error) {
+	public void setError(boolean error) {
 		this.error = error;
 	}
 
