@@ -14,7 +14,6 @@ import com.fatec.mogi.command.SaveCommand;
 import com.fatec.mogi.command.UpdateCommand;
 import com.fatec.mogi.model.aplication.Filter;
 import com.fatec.mogi.model.domain.DomainEntity;
-import com.sun.istack.NotNull;
 
 @SuppressWarnings("rawtypes")
 public class AbstractController<T extends DomainEntity> {
@@ -28,27 +27,34 @@ public class AbstractController<T extends DomainEntity> {
 	@Autowired
 	UpdateCommand updateCommand;
 
+	Class<? extends DomainEntity> clazz;
+	
+	
+	public AbstractController(Class<? extends DomainEntity> clazz) {
+		this.clazz = clazz;
+	}
+
 	@PostMapping
-	public ResponseEntity save(@RequestBody T entidade) {
-		Filter<T> filter =new Filter<T>(entidade.getClass());
+	public ResponseEntity save(@RequestBody T entity) {
+		Filter<T> filter =new Filter<T>(entity,clazz);
 		return saveCommand.execute(filter).buildResponse(); 
 	}
 
 	@GetMapping
-	public ResponseEntity find( @NotNull T entidade) {
-		Filter<T> filter =new Filter<T>(entidade.getClass());
+	public ResponseEntity find( @RequestBody(required = false) T entity) {
+		Filter<T> filter =new Filter<T>(entity,clazz);
 		return findCommand.execute(filter).buildResponse();
 	}
 
 	@DeleteMapping
-	public ResponseEntity delete(@RequestBody(required = true) T  entidade) {
-		Filter<T> filter =new Filter<T>(entidade.getClass());
+	public ResponseEntity delete(@RequestBody(required = true) T  entity) {
+		Filter<T> filter =new Filter<T>(entity,clazz);
 		return deleteCommand.execute(filter).buildResponse();
 	}
 
 	@PutMapping
-	public ResponseEntity  update(@RequestBody(required = true) T entidade) {
-		Filter<T> filter =new Filter<T>(entidade.getClass());
+	public ResponseEntity  update(@RequestBody(required = true) T entity) {
+		Filter<T> filter =new Filter<T>(entity,clazz);
 		return updateCommand.execute(filter).buildResponse();
 	}
 
