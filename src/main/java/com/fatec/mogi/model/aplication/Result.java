@@ -1,5 +1,6 @@
 package com.fatec.mogi.model.aplication;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -7,9 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.fatec.mogi.model.domain.DomainEntity;
+import com.fatec.mogi.util.MessagesUtil;
 
 public class Result extends AplicationEntity {
-	private Map<String, String> messages;
+	private Map<String, String> messages = new HashMap<>();
 	private List<? extends DomainEntity> resultList;
 	private boolean error;
 
@@ -28,8 +30,12 @@ public class Result extends AplicationEntity {
 	public ResponseEntity buildResponse() {
 		if (this.error) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(messages);
-		} else if (this.resultList.isEmpty()) {
+		}
+		if (this.messages.containsKey(MessagesUtil.NOT_FOUND)) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(messages);
+		}
+		if (this.messages.containsKey(MessagesUtil.DELETED)) {
+			return ResponseEntity.status(HttpStatus.OK).body(messages);
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(resultList);
 	}
