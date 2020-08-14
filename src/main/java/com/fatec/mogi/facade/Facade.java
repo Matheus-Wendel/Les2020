@@ -1,5 +1,6 @@
 package com.fatec.mogi.facade;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import com.fatec.mogi.model.aplication.Result;
 import com.fatec.mogi.model.domain.DomainEntity;
 import com.fatec.mogi.strategy.IStrategy;
 import com.fatec.mogi.strategy.StrategyUtil;
+import com.fatec.mogi.util.CrudOperationEnum;
 
 @Service
 public class Facade implements IFacade {
@@ -36,14 +38,18 @@ public class Facade implements IFacade {
 
 	@Override
 	public Result find(Filter<? extends DomainEntity> filter) {
+		Map<String, String> validationResultMap = processStrategies(filter, CrudOperationEnum.FIND);
+		if (!validationResultMap.isEmpty()) {
+			return new Result(validationResultMap, null, true);
+		}
 		return getDAO(filter).find(filter);
 	}
 
 	@Override
 	public Result save(Filter<? extends DomainEntity> filter) {
-		Map<String,String> validationResultMap = processStrategies(getStrategies(filter), filter);
-		
-		if(!validationResultMap.isEmpty()) {
+		Map<String, String> validationResultMap = processStrategies(filter, CrudOperationEnum.SAVE);
+
+		if (!validationResultMap.isEmpty()) {
 			return new Result(validationResultMap, null, true);
 		}
 		return getDAO(filter).save(filter);
@@ -51,14 +57,22 @@ public class Facade implements IFacade {
 
 	@Override
 	public Result update(Filter<? extends DomainEntity> filter) {
-		// TODO Auto-generated method stub
-		return null;
+		Map<String, String> validationResultMap = processStrategies(filter, CrudOperationEnum.UPDATE);
+
+		if (!validationResultMap.isEmpty()) {
+			return new Result(validationResultMap, null, true);
+		}
+		return getDAO(filter).update(filter);
 	}
 
 	@Override
 	public Result delete(Filter<? extends DomainEntity> filter) {
-		// TODO Auto-generated method stub
-		return null;
+		Map<String, String> validationResultMap = processStrategies(filter, CrudOperationEnum.DELETE);
+
+		if (!validationResultMap.isEmpty()) {
+			return new Result(validationResultMap, null, true);
+		}
+		return getDAO(filter).delete(filter);
 	}
 
 	private IDAO getDAO(Filter<? extends DomainEntity> filter) {
@@ -67,17 +81,27 @@ public class Facade implements IFacade {
 		return daoMap.get(daoClassName);
 	}
 
-	private List<IStrategy> getStrategies(Filter<? extends DomainEntity> filter) {
-		String strategyListName = filter.getClazz().getSimpleName().toLowerCase();
-		return mapStrategy.get(strategyListName);
+	private List<IStrategy> getStrategies(String strategyListName) {
+		List<IStrategy> strategyList = mapStrategy.get(strategyListName);
+		if (strategyList == null || strategyList.isEmpty()) {
+			return Collections.<IStrategy>emptyList();
+		}
+		return strategyList;
 	};
 
-	private Map<String, String> processStrategies(List<IStrategy> strategies, Filter<? extends DomainEntity> filter) {
+	private Map<String, String> processStrategies(Filter<? extends DomainEntity> filter, CrudOperationEnum operation) {
+		List<IStrategy> strategies = getStrategies(filter.getClazz().getSimpleName().toLowerCase() + operation.name());
+		strategies
+				.addAll(getStrategies(filter.getClazz().getSimpleName().toLowerCase() + CrudOperationEnum.ALL.name()));
+
 		Map<String, String> messagesMap = new HashMap<>();
-		if (strategies == null || strategies.isEmpty()) {
+
+		if (strategies.isEmpty()) {
 			return messagesMap;
 		}
+
 		DomainEntity entity = filter.getEntity();
+
 		for (IStrategy strategy : strategies) {
 			String processResult = strategy.process(entity);
 			if (!processResult.isBlank()) {
