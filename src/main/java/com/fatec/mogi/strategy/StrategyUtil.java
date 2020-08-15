@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fatec.mogi.repository.UserRepository;
+import com.fatec.mogi.util.CrudOperationEnum;
 @Service
 public class StrategyUtil {
 
@@ -31,7 +32,8 @@ public class StrategyUtil {
 		Map<String, List<IStrategy>> strategiesMap = new HashMap<>();
 		
 		//Filling the map
-		strategiesMap.put("user", userValidations);
+		strategiesMap.put("user"+CrudOperationEnum.SAVE.name(), userValidations);
+		strategiesMap.put("user"+CrudOperationEnum.UPDATE.name(), userValidations);
 		
 		return strategiesMap;
 	}
