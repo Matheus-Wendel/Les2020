@@ -34,4 +34,3 @@ mvnw
 mvnw.cmd
 .mvn/wrapper/maven-wrapper.properties
 .mvn/wrapper/MavenWrapperDownloader.java
-src/test/java/comfatec/mogi/ApiLesApplicationTests.java
