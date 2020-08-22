@@ -2,7 +2,7 @@ package com.fatec.mogi.model.aplication;
 
 import com.fatec.mogi.model.domain.DomainEntity;
 
-public class Filter<T extends DomainEntity> extends AplicationEntity {
+public class Filter<T extends DomainEntity> {
 
 	private T entity;
 	private Class<? extends DomainEntity> clazz;

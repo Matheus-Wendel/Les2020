@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import com.fatec.mogi.model.domain.DomainEntity;
 import com.fatec.mogi.util.MessagesUtil;
 
-public class Result extends AplicationEntity {
+public class Result {
 	private Map<String, String> messages = new HashMap<>();
 	private List<? extends DomainEntity> resultList;
 	private boolean error;
