@@ -2,6 +2,7 @@ package com.fatec.mogi.model.domain;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -17,11 +18,12 @@ public class Client extends Person {
 	private String telephone;
 	@Column(nullable = false)
 	private double ranking;
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private Address billingAddress;
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
+	
 	private List<Address> deliveryAddresses;
-	@OneToMany
+	@OneToMany(cascade = CascadeType.PERSIST)
 	private List<CreditCard> creditCards;
 	@OneToOne
 	private Cart cart;
