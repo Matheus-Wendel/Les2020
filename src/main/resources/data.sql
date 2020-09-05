@@ -116,3 +116,19 @@ INSERT INTO CITY (id, description, state_id) VALUES (83, 'Capixaba', 1);
 INSERT INTO CITY (id, description, state_id) VALUES (84, 'Cruzeiro do Sul', 1); 
 INSERT INTO CITY (id, description, state_id) VALUES (85, 'Epitaciolândia', 1);  
 INSERT INTO CITY (id, description, state_id) VALUES (86, 'Feijó', 1);   
+
+
+
+INSERT INTO CARD_BRAND (id, description) VALUES (1, 'Visa');   
+INSERT INTO CARD_BRAND (id, description) VALUES (2, 'Mastercard');   
+INSERT INTO CARD_BRAND (id, description) VALUES (3, 'American Express');   
+INSERT INTO CARD_BRAND (id, description) VALUES (4, 'Elo');   
+INSERT INTO CARD_BRAND (id, description) VALUES (5,'Policard');
+INSERT INTO CARD_BRAND (id, description) VALUES (6,'Valecard');
+INSERT INTO CARD_BRAND (id, description) VALUES (7,'Agicard');
+INSERT INTO CARD_BRAND (id, description) VALUES (8,'JCB');
+INSERT INTO CARD_BRAND (id, description) VALUES (9,'CredSystem');
+INSERT INTO CARD_BRAND (id, description) VALUES (10,'Cabal');
+INSERT INTO CARD_BRAND (id, description) VALUES (11,'Green Card');
+INSERT INTO CARD_BRAND (id, description) VALUES (12,'Verocheque');
+INSERT INTO CARD_BRAND (id, description) VALUES (13,'Avista');  
