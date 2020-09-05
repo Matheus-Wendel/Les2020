@@ -12,6 +12,7 @@ import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fatec.mogi.util.ConstantsUtil;
+
 @Entity
 public class CreditCard extends DomainEntity {
 	@Column(nullable = false)
@@ -28,6 +29,16 @@ public class CreditCard extends DomainEntity {
 	private boolean vailid;
 	@ManyToOne
 	private Client client;
+	@ManyToOne
+	private CardBrand cardBrand;
+
+	public CardBrand getCardBrand() {
+		return cardBrand;
+	}
+
+	public void setCardBrand(CardBrand cardBrand) {
+		this.cardBrand = cardBrand;
+	}
 
 	public String getNumber() {
 		return number;
