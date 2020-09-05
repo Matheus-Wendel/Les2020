@@ -1,6 +1,7 @@
 package com.fatec.mogi;
 
 import java.util.Arrays;
+import java.util.Calendar;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -21,7 +22,7 @@ import com.fatec.mogi.repository.ClientRepository;
 
 
 
-@SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
+@SpringBootApplication()
 public class ApiLesApplication implements CommandLineRunner {
 
 	@Autowired
@@ -63,11 +64,15 @@ public class ApiLesApplication implements CommandLineRunner {
 		creditCard1.setName("MAE DA SILVA");
 		creditCard1.setNumber("4444777755552222");
 		creditCard1.setVailid(true);
+		var calendar1 = new Calendar.Builder().set(Calendar.MONTH, 10).set(Calendar.YEAR, 2025).build();
+		creditCard1.setExpirationDate(calendar1.getTime());
 
 		creditCard2.setCardBrand(cardBrand2);
 		creditCard2.setCvv("452");
 		creditCard2.setName("EU DA SILVA");
 		creditCard2.setNumber("7777888855552222");
+		var calendar2 = new Calendar.Builder().set(Calendar.MONTH, 8).set(Calendar.YEAR, 2025).build();
+		creditCard2.setExpirationDate(calendar2.getTime());
 		creditCard2.setVailid(false);
 		
 		user.setEmail("matheus@outlook.com");
