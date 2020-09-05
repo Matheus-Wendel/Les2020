@@ -4,13 +4,21 @@ import com.fatec.mogi.enumeration.PermissionEnum;
 import com.fatec.mogi.model.domain.Address;
 import com.fatec.mogi.model.domain.Client;
 import com.fatec.mogi.model.domain.DomainEntity;
+import com.fatec.mogi.repository.ClientRepository;
 
 public class ClientValidation implements IStrategy {
 
+	ClientRepository clientRepository;
+	
+	AddressValidation addressValidation;
+	public ClientValidation(ClientRepository clientRepository, AddressValidation addressValidation) {
+		this.clientRepository = clientRepository;
+		this.addressValidation = addressValidation;
+	}
 	@Override
 	public String process(DomainEntity entity) {
 		var client = (Client) entity;
-		var addressValidation = new AddressValidation();
+		
 		StringBuilder sb = new StringBuilder();
 
 		
