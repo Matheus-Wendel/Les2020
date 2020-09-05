@@ -25,9 +25,18 @@ public class Client extends Person {
 	private List<Address> deliveryAddresses;
 	@OneToMany(cascade = CascadeType.PERSIST)
 	private List<CreditCard> creditCards;
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private Cart cart;
 	
+	
+
+	public Cart getCart() {
+		return cart;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
+	}
 
 	public String getCode() {
 		return code;
