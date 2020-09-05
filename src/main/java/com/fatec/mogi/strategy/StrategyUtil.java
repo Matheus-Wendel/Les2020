@@ -24,6 +24,7 @@ public class StrategyUtil {
 	public Map<String, List<IStrategy>> getStrategies() {
 		// Strategies Lists
 		List<IStrategy> clientValidations = new ArrayList<>();
+		List<IStrategy> addressValidations = new ArrayList<>();
 
 		// Strategies Instances
 		AddressValidation addressValidation = new AddressValidation(cityRepository);
@@ -31,12 +32,15 @@ public class StrategyUtil {
 
 		// Filling the lists
 		clientValidations.add(clientValidation);
+		addressValidations.add(addressValidation);
 
 		// Strategy map
 		Map<String, List<IStrategy>> strategiesMap = new HashMap<>();
 
 		// Filling the map
 		strategiesMap.put("client" + CrudOperationEnum.SAVE.name(), clientValidations);
+		strategiesMap.put("address" + CrudOperationEnum.SAVE.name(), addressValidations);
+		strategiesMap.put("address" + CrudOperationEnum.UPDATE.name(), addressValidations);
 
 		return strategiesMap;
 	}
