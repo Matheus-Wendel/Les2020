@@ -75,7 +75,7 @@ public class ApiLesApplication implements CommandLineRunner {
 		creditCard2.setExpirationDate(calendar2.getTime());
 		creditCard2.setVailid(false);
 		
-		user.setEmail("matheus@outlook.com");
+		user.setEmail("matheus");
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 		user.setPassword(bCryptPasswordEncoder.encode("matheus"));
 		
