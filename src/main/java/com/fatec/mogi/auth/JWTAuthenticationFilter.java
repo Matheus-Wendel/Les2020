@@ -1,10 +1,10 @@
 package com.fatec.mogi.auth;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.stream.Collectors;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -67,6 +67,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 //	        String body ="\""+ SecurityConstants.TOKEN_PREFIX + token+"\"";
 //			writer.print(body.toString());
 //	        writer.flush();
+	    	
+	    	
 	    	Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
 	    	for (GrantedAuthority grantedAuthority : authorities) {
 				System.err.println( grantedAuthority.getAuthority());
@@ -75,8 +77,15 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		                .withSubject(((org.springframework.security.core.userdetails.User) auth.getPrincipal()).getUsername())
 		                .withExpiresAt(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
 		                .sign(Algorithm.HMAC512(SecurityConstants.SECRET.getBytes()));
-		        res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
-		        res.addHeader(SecurityConstants.PERMISSION_STRING, auth.getAuthorities().iterator().next().toString());
+	//		        res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
+	//		        res.addHeader(SecurityConstants.PERMISSION_STRING, auth.getAuthorities().iterator().next().toString());
+	    	 res.setContentType("application/json");
+		        PrintWriter writer = res.getWriter();
+
+		        String body ="{\"Authorization\":\""+ SecurityConstants.TOKEN_PREFIX + token+"\",";
+		        body+="\"Permission\":\""+auth.getAuthorities().iterator().next().toString()+"\"}";
+				writer.print(body);
+		        writer.flush();
 
 	    }
 }
