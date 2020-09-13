@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.fatec.mogi.enumeration.PermissionEnum;
@@ -18,15 +17,17 @@ import com.fatec.mogi.model.domain.City;
 import com.fatec.mogi.model.domain.Client;
 import com.fatec.mogi.model.domain.CreditCard;
 import com.fatec.mogi.model.domain.User;
+import com.fatec.mogi.repository.AddressRepository;
 import com.fatec.mogi.repository.ClientRepository;
-
-
 
 @SpringBootApplication()
 public class ApiLesApplication implements CommandLineRunner {
 
 	@Autowired
 	ClientRepository clientRepository;
+
+	@Autowired
+	AddressRepository addressRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ApiLesApplication.class, args);
@@ -43,7 +44,7 @@ public class ApiLesApplication implements CommandLineRunner {
 
 		var cardBrand1 = new CardBrand();
 		var cardBrand2 = new CardBrand();
-		
+
 		var user = new User();
 		var cart = new Cart();
 
@@ -54,11 +55,10 @@ public class ApiLesApplication implements CommandLineRunner {
 
 		var bACity = new City();
 		bACity.setId(17);
-		
+
 		cardBrand1.setId(1);
 		cardBrand2.setId(3);
 
-		
 		creditCard1.setCardBrand(cardBrand1);
 		creditCard1.setCvv("111");
 		creditCard1.setName("MAE DA SILVA");
@@ -74,11 +74,11 @@ public class ApiLesApplication implements CommandLineRunner {
 		var calendar2 = new Calendar.Builder().set(Calendar.MONTH, 8).set(Calendar.YEAR, 2025).build();
 		creditCard2.setExpirationDate(calendar2.getTime());
 		creditCard2.setVailid(false);
-		
+
 		user.setEmail("matheus");
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 		user.setPassword(bCryptPasswordEncoder.encode("matheus"));
-		
+
 		user.setPermission(PermissionEnum.CLIENT);
 		deliveryAddresses1.setAddressDescription("Rua do Quinto da fatex");
 		deliveryAddresses1.setAddressType("Rua");
@@ -101,8 +101,6 @@ public class ApiLesApplication implements CommandLineRunner {
 		billingAddres.setDistrict("Vila vial");
 		billingAddres.setNumber("4");
 		billingAddres.setCity(bACity);
-		
-		
 
 		client.setCode("UNIQUECODE CHANGE TO ID?");
 		client.setCpf("44444444444");
@@ -110,15 +108,15 @@ public class ApiLesApplication implements CommandLineRunner {
 		client.setName("Eu da Silva");
 		client.setRanking(5);
 		client.setTelephone("1199999999");
-		client.setDeliveryAddresses(Arrays.asList(deliveryAddresses1, deliveryAddresses2));
-		client.setBillingAddress(billingAddres);
 		client.setCart(cart);
 		client.setUser(user);
-		client.setCreditCards(Arrays.asList(creditCard1,creditCard2));
-		
-		
-		clientRepository.save(client);
+		client.setCreditCards(Arrays.asList(creditCard1, creditCard2));
 
+		clientRepository.save(client);
+		deliveryAddresses1.setClient(client);
+		deliveryAddresses2.setClient(client);
+		addressRepository.save(deliveryAddresses1);
+		addressRepository.save(deliveryAddresses2);
 	}
 
 }
