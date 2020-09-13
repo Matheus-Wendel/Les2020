@@ -2,6 +2,7 @@ package com.fatec.mogi.model.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -24,6 +25,19 @@ public class Address extends DomainEntity {
 	private String observations;
 	@ManyToOne
 	private City city;
+	
+	@ManyToOne
+	@JoinColumn(name="client_delivery_id", referencedColumnName="id")
+	private Client client;
+
+	
+	public Client getClient() {
+		return client;
+	}
+
+	public void setClient(Client client) {
+		this.client = client;
+	}
 
 	public String getDescription() {
 		return description;
