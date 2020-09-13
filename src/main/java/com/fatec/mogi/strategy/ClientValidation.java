@@ -43,12 +43,17 @@ public class ClientValidation implements IStrategy {
 			for (Address address : client.getDeliveryAddresses()) {
 				sb.append(addressValidation.process(address));
 			}
+		}else {
+			sb.append("Ao menos um endereço de envio deve ser cadastrado");
 		}
-		client.setRanking(5);
-		client.setCode("Akamska");
-		client.getUser().setPermission(PermissionEnum.CLIENT);
 		var personValidation = new PersonValidation();
 		sb.append(personValidation.process(entity));
+		if(client.getId()==0&&sb.length()>0) {
+			//SAVING A NEW ONE, SETTING DEFAULT VALUES
+			client.setRanking(5);
+			client.setCode("Akamska");
+			client.getUser().setPermission(PermissionEnum.CLIENT);
+		}
 
 		return sb.toString();
 	}
