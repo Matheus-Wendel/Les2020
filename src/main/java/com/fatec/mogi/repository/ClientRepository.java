@@ -6,4 +6,6 @@ import com.fatec.mogi.model.domain.Client;
 
 public interface ClientRepository extends JpaRepository<Client, Integer> {
 
+
+	public Client findByUserEmail(String email);
 }
