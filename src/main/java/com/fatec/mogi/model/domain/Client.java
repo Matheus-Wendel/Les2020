@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 public class Client extends Person {
 	@Column(nullable = false)
@@ -18,12 +20,13 @@ public class Client extends Person {
 	private String telephone;
 	@Column(nullable = false)
 	private double ranking;
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.PERSIST)
 	private Address billingAddress;
-	@OneToMany(cascade = CascadeType.ALL)
-	
+	@OneToMany(mappedBy = "client", cascade = CascadeType.PERSIST)
+	@JsonIgnoreProperties("client")
 	private List<Address> deliveryAddresses;
-	@OneToMany(cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "client")
+	@JsonIgnoreProperties("client")
 	private List<CreditCard> creditCards;
 	@OneToOne(cascade = CascadeType.ALL)
 	private Cart cart;
