@@ -34,7 +34,7 @@ public class Result {
 		if (this.messages.containsKey(MessagesUtil.NOT_FOUND)) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(messages);
 		}
-		if (this.messages.containsKey(MessagesUtil.DELETED)) {
+		if (this.messages.containsKey(MessagesUtil.DELETED)||this.messages.containsKey(MessagesUtil.DEACTIVATED)) {
 			return ResponseEntity.status(HttpStatus.OK).body(messages);
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(resultList);
