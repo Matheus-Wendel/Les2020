@@ -11,17 +11,22 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.fatec.mogi.repository.UserRepository;
+import com.fatec.mogi.model.domain.Client;
+import com.fatec.mogi.repository.ClientRepository;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
-	private UserRepository userRepository;
+	private ClientRepository clientRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		com.fatec.mogi.model.domain.User user = userRepository.findByEmail(email);
+		Client client = clientRepository.findByUserEmail(email);
+		if(client==null) {
+			throw new UsernameNotFoundException(email);			
+		}
+		com.fatec.mogi.model.domain.User user = client.getUser();
 		if (user == null) {
 			throw new UsernameNotFoundException(email);
 		}
