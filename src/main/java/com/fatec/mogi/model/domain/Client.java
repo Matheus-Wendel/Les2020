@@ -8,9 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import org.hibernate.annotations.Where;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
+@Where(clause="active=1")
 public class Client extends Person {
 	@Column(nullable = false)
 	private String code;
@@ -30,8 +33,16 @@ public class Client extends Person {
 	private List<CreditCard> creditCards;
 	@OneToOne(cascade = CascadeType.ALL)
 	private Cart cart;
-	
-	
+	@Column(name = "active")
+	private boolean active = true;
+
+	public boolean getActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 
 	public Cart getCart() {
 		return cart;
@@ -96,5 +107,15 @@ public class Client extends Person {
 	public void setCreditCards(List<CreditCard> creditCards) {
 		this.creditCards = creditCards;
 	}
+
+	@Override
+	public String toString() {
+		return "Client [code=" + code + ", genre=" + genre + ", telephone=" + telephone + ", ranking=" + ranking
+				+ ", billingAddress=" + billingAddress + ", deliveryAddresses=" + deliveryAddresses + ", creditCards="
+				+ creditCards + ", cart=" + cart + ", active=" + active + ", getId()=" + getId() + "]";
+	}
+
+
+	
 
 }
