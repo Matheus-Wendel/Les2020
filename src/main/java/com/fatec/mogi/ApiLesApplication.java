@@ -111,12 +111,13 @@ public class ApiLesApplication implements CommandLineRunner {
 		client.setCart(cart);
 		client.setUser(user);
 		client.setCreditCards(Arrays.asList(creditCard1, creditCard2));
-
+client.setDeliveryAddresses(Arrays.asList(deliveryAddresses1,deliveryAddresses2));
+		client.getDeliveryAddresses().stream().forEach(a -> a.setClient(client));
 		clientRepository.save(client);
-		deliveryAddresses1.setClient(client);
-		deliveryAddresses2.setClient(client);
-		addressRepository.save(deliveryAddresses1);
-		addressRepository.save(deliveryAddresses2);
+//		deliveryAddresses1.setClient(client);
+//		deliveryAddresses2.setClient(client);
+//		addressRepository.save(deliveryAddresses1);
+//		addressRepository.save(deliveryAddresses2);
 	}
 
 }
