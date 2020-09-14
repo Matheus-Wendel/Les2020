@@ -48,7 +48,7 @@ public class ClientValidation implements IStrategy {
 		}
 		var personValidation = new PersonValidation();
 		sb.append(personValidation.process(entity));
-		if(client.getId()==null&&sb.length()==0) {
+		if(sb.length()==0) {
 			//SAVING A NEW ONE, SETTING DEFAULT VALUES
 			client.setRanking(5);
 			client.setCode("Akamska");
