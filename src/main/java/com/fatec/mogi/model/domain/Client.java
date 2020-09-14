@@ -2,7 +2,6 @@ package com.fatec.mogi.model.domain;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -23,15 +22,15 @@ public class Client extends Person {
 	private String telephone;
 	@Column(nullable = false)
 	private double ranking;
-	@OneToOne(cascade = CascadeType.PERSIST)
+	@OneToOne
 	private Address billingAddress;
-	@OneToMany(mappedBy = "client", cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "client")
 	@JsonIgnoreProperties("client")
 	private List<Address> deliveryAddresses;
 	@OneToMany(mappedBy = "client")
 	@JsonIgnoreProperties("client")
 	private List<CreditCard> creditCards;
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne
 	private Cart cart;
 	@Column(name = "active")
 	private boolean active = true;
