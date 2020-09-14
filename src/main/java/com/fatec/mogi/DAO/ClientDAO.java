@@ -14,7 +14,9 @@ import com.fatec.mogi.model.aplication.Result;
 import com.fatec.mogi.model.domain.Client;
 import com.fatec.mogi.model.domain.DomainEntity;
 import com.fatec.mogi.repository.AddressRepository;
+import com.fatec.mogi.repository.CartRepository;
 import com.fatec.mogi.repository.ClientRepository;
+import com.fatec.mogi.repository.UserRepository;
 import com.fatec.mogi.util.MessagesUtil;
 
 @Service
@@ -22,8 +24,13 @@ public class ClientDAO extends AbstractDAO<Client> {
 
 	@Autowired
 	AddressRepository addressRepository;
+	@Autowired
+	UserRepository userRepository;
+	@Autowired
+	CartRepository cartRepository;
 	
 	ClientRepository clientRepository;
+	
 
 	@Autowired
 	public ClientDAO(JpaRepository<Client, Integer> repository) {
@@ -32,9 +39,15 @@ public class ClientDAO extends AbstractDAO<Client> {
 	}
 
 	@Override
+	@Transactional
 	public Result save(Filter<? extends DomainEntity> filter) {
 		var client = (Client) filter.getEntity();
 		client.getDeliveryAddresses().stream().forEach(a -> a.setClient(client));
+		addressRepository.saveAll(client.getDeliveryAddresses());
+		addressRepository.save(client.getBillingAddress());
+		userRepository.save(client.getUser());
+		cartRepository.save(client.getCart());
+		
 		return super.save(filter);
 	}
 
@@ -69,4 +82,20 @@ public class ClientDAO extends AbstractDAO<Client> {
 		return result;
 	}
 
+	@Override
+	@Transactional
+	public Result update(Filter<? extends DomainEntity> filter) {
+		var client = (Client) filter.getEntity();
+		var oldClient = AuthUtils.getLoggedClient();
+		client.setId(oldClient.getId());
+		if(client.getBillingAddress()!=null) {
+			client.getBillingAddress().setId(oldClient.getBillingAddress().getId());
+			addressRepository.save(client.getBillingAddress());
+		}
+		if(client.getUser()!=null) {
+			client.getUser().setId(oldClient.getUser().getId());
+			userRepository.save(client.getUser());
+		}
+		return super.update(filter);
+	}
 }
