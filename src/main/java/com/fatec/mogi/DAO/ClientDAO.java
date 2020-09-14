@@ -1,5 +1,7 @@
 package com.fatec.mogi.DAO;
 
+import java.util.Arrays;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +59,14 @@ public class ClientDAO extends AbstractDAO<Client> {
 			result.getMessages().put("Cause", e.getCause().toString());
 			return result;
 		}
+	}
+	
+	@Override
+	public Result find(Filter<? extends DomainEntity> filter) {
+		Result result = new Result();
+		System.err.println(AuthUtils.getLoggedClient());
+		result.setResultList(Arrays.asList(AuthUtils.getLoggedClient()));
+		return result;
 	}
 
 }
