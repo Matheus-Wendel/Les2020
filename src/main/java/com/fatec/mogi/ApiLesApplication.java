@@ -9,7 +9,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.fatec.mogi.DAO.ClientDAO;
 import com.fatec.mogi.enumeration.PermissionEnum;
+import com.fatec.mogi.model.aplication.Filter;
 import com.fatec.mogi.model.domain.Address;
 import com.fatec.mogi.model.domain.CardBrand;
 import com.fatec.mogi.model.domain.Cart;
@@ -17,17 +19,12 @@ import com.fatec.mogi.model.domain.City;
 import com.fatec.mogi.model.domain.Client;
 import com.fatec.mogi.model.domain.CreditCard;
 import com.fatec.mogi.model.domain.User;
-import com.fatec.mogi.repository.AddressRepository;
-import com.fatec.mogi.repository.ClientRepository;
 
 @SpringBootApplication()
 public class ApiLesApplication implements CommandLineRunner {
 
 	@Autowired
-	ClientRepository clientRepository;
-
-	@Autowired
-	AddressRepository addressRepository;
+	ClientDAO clientDao;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ApiLesApplication.class, args);
@@ -110,12 +107,13 @@ public class ApiLesApplication implements CommandLineRunner {
 		client.setTelephone("1199999999");
 		client.setCart(cart);
 		client.setUser(user);
-		client.setCreditCards(Arrays.asList(creditCard1, creditCard2));
-client.setDeliveryAddresses(Arrays.asList(deliveryAddresses1,deliveryAddresses2));
+		client.setBillingAddress(billingAddres);
+		client.setDeliveryAddresses(Arrays.asList(deliveryAddresses1, deliveryAddresses2));
 		client.getDeliveryAddresses().stream().forEach(a -> a.setClient(client));
-		clientRepository.save(client);
-//		deliveryAddresses1.setClient(client);
-//		deliveryAddresses2.setClient(client);
+		deliveryAddresses1.setClient(client);
+		deliveryAddresses2.setClient(client);
+		Filter<Client> filter = new Filter<Client>(client, Client.class);
+		clientDao.save(filter);
 //		addressRepository.save(deliveryAddresses1);
 //		addressRepository.save(deliveryAddresses2);
 	}
