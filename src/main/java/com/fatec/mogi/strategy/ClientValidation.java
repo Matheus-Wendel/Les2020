@@ -2,6 +2,7 @@ package com.fatec.mogi.strategy;
 
 import com.fatec.mogi.enumeration.PermissionEnum;
 import com.fatec.mogi.model.domain.Address;
+import com.fatec.mogi.model.domain.Cart;
 import com.fatec.mogi.model.domain.Client;
 import com.fatec.mogi.model.domain.DomainEntity;
 import com.fatec.mogi.repository.ClientRepository;
@@ -53,6 +54,7 @@ public class ClientValidation implements IStrategy {
 			client.setRanking(5);
 			client.setCode("Akamska");
 			client.getUser().setPermission(PermissionEnum.CLIENT);
+			client.setCart(new Cart());
 		}
 
 		return sb.toString();
