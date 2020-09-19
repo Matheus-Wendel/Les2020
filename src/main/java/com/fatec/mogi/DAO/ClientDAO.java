@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import com.fatec.mogi.auth.AuthUtils;
+import com.fatec.mogi.enumeration.PermissionEnum;
 import com.fatec.mogi.model.aplication.Filter;
 import com.fatec.mogi.model.aplication.Result;
 import com.fatec.mogi.model.domain.Client;
@@ -76,6 +77,10 @@ public class ClientDAO extends AbstractDAO<Client> {
 	
 	@Override
 	public Result find(Filter<? extends DomainEntity> filter) {
+		var loggedUser = AuthUtils.getLoggedUser();
+		if(loggedUser.getPermission()!=PermissionEnum.CLIENT) {
+			return super.find(filter);
+		}
 		Result result = new Result();
 		System.err.println(AuthUtils.getLoggedClient());
 		result.setResultList(Arrays.asList(AuthUtils.getLoggedClient()));
