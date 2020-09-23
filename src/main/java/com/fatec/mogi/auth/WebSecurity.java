@@ -11,6 +11,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.fatec.mogi.enumeration.PermissionEnum;
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter{
 	 private UserDetailsServiceImpl userDetailsService;
@@ -26,9 +28,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter{
 	    protected void configure(HttpSecurity http) throws Exception {
 	        http.cors().and().csrf().disable().authorizeRequests()
 	                .antMatchers(HttpMethod.POST, "/client").permitAll()
-	                .antMatchers(HttpMethod.GET, "/country").permitAll()
-	                .antMatchers(HttpMethod.GET, "/city").permitAll()
-	                .antMatchers(HttpMethod.GET, "/state").permitAll()
+	                .antMatchers(HttpMethod.GET, AccessRoutesUtil.GET_FREE_ACCESS_ROUTES).permitAll()
+	                .antMatchers(HttpMethod.POST, AccessRoutesUtil.POST_CLIENT_ACCESS_ROUTES).hasAuthority(PermissionEnum.CLIENT.name())
+	                .antMatchers(HttpMethod.PUT, AccessRoutesUtil.PUT_CLIENT_ACCESS_ROUTES).hasAuthority(PermissionEnum.CLIENT.name())
+	                .antMatchers(HttpMethod.POST, AccessRoutesUtil.POST_EMPLOYEE_ACCESS_ROUTES).hasAnyAuthority(PermissionEnum.EMPLOYEE.name(),PermissionEnum.SALES_MANAGER.name())
+	                .antMatchers(HttpMethod.PUT, AccessRoutesUtil.PUT_EMPLOYEE_ACCESS_ROUTES).hasAnyAuthority(PermissionEnum.EMPLOYEE.name(),PermissionEnum.SALES_MANAGER.name())
 	                .antMatchers("/h2-console").permitAll()
 	                .antMatchers("/h2-console/**").permitAll()
 	                .anyRequest().authenticated()
