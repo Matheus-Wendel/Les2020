@@ -4,6 +4,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 @Entity
 public class Pricing extends DomainEntity {
 	@Column(nullable = false)
@@ -13,6 +16,7 @@ public class Pricing extends DomainEntity {
 	@Column(nullable = false)
 	private double minimumProfit;
 	@OneToOne
+	@Cascade(CascadeType.ALL)
 	private Sale sale;
 
 	public double getDefautProfit() {
