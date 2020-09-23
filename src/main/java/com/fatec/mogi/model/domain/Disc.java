@@ -1,15 +1,20 @@
 package com.fatec.mogi.model.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fatec.mogi.util.ConstantsUtil;
 
 @Entity
@@ -35,6 +40,17 @@ public class Disc extends DomainEntity {
 	private String status;
 	@OneToOne
 	private ActivationDetails activationDetails;
+	@ManyToMany
+	private List<Artist> artists;
+	@ManyToMany
+	private List<Genre> genres;
+	@ManyToOne
+	private Pricing pricing;
+	@ManyToOne
+	private Recorder recorder;
+	@OneToMany(mappedBy = "disc")
+	@JsonIgnoreProperties("disc")
+	private List<Stock> stock;
 
 	public boolean isActive() {
 		return active;
@@ -106,6 +122,46 @@ public class Disc extends DomainEntity {
 
 	public void setActivationDetails(ActivationDetails activationDetails) {
 		this.activationDetails = activationDetails;
+	}
+
+	public List<Artist> getArtists() {
+		return artists;
+	}
+
+	public void setArtists(List<Artist> artists) {
+		this.artists = artists;
+	}
+
+	public List<Genre> getGenres() {
+		return genres;
+	}
+
+	public void setGenres(List<Genre> genres) {
+		this.genres = genres;
+	}
+
+	public Pricing getPricing() {
+		return pricing;
+	}
+
+	public void setPricing(Pricing pricing) {
+		this.pricing = pricing;
+	}
+
+	public Recorder getRecorder() {
+		return recorder;
+	}
+
+	public void setRecorder(Recorder recorder) {
+		this.recorder = recorder;
+	}
+
+	public List<Stock> getStock() {
+		return stock;
+	}
+
+	public void setStock(List<Stock> stock) {
+		this.stock = stock;
 	}
 
 }
