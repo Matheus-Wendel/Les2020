@@ -2,6 +2,8 @@ package com.fatec.mogi;
 
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -9,15 +11,32 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.fatec.mogi.DAO.ArtistDAO;
 import com.fatec.mogi.DAO.ClientDAO;
+import com.fatec.mogi.DAO.DiscDAO;
+import com.fatec.mogi.DAO.EmployeeDAO;
+import com.fatec.mogi.DAO.GenreDAO;
+import com.fatec.mogi.DAO.PricingDAO;
+import com.fatec.mogi.DAO.RecorderDAO;
+import com.fatec.mogi.DAO.StockDAO;
 import com.fatec.mogi.enumeration.PermissionEnum;
+import com.fatec.mogi.enumeration.SaleStatusEnum;
 import com.fatec.mogi.model.aplication.Filter;
+import com.fatec.mogi.model.domain.ActivationDetails;
 import com.fatec.mogi.model.domain.Address;
+import com.fatec.mogi.model.domain.Artist;
 import com.fatec.mogi.model.domain.CardBrand;
 import com.fatec.mogi.model.domain.Cart;
 import com.fatec.mogi.model.domain.City;
 import com.fatec.mogi.model.domain.Client;
 import com.fatec.mogi.model.domain.CreditCard;
+import com.fatec.mogi.model.domain.Disc;
+import com.fatec.mogi.model.domain.Employee;
+import com.fatec.mogi.model.domain.Genre;
+import com.fatec.mogi.model.domain.Pricing;
+import com.fatec.mogi.model.domain.Recorder;
+import com.fatec.mogi.model.domain.Sale;
+import com.fatec.mogi.model.domain.Stock;
 import com.fatec.mogi.model.domain.User;
 
 @SpringBootApplication()
@@ -25,6 +44,22 @@ public class ApiLesApplication implements CommandLineRunner {
 
 	@Autowired
 	ClientDAO clientDao;
+	@Autowired
+	EmployeeDAO employeeDAO;
+	@Autowired
+	RecorderDAO recorderDAO;
+	@Autowired
+	ArtistDAO artistDAO;
+	@Autowired
+	GenreDAO genreDAO;
+	@Autowired
+	PricingDAO pricingDAO;
+
+	@Autowired
+	StockDAO stockDAO;
+
+	@Autowired
+	DiscDAO discDAO;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ApiLesApplication.class, args);
@@ -109,13 +144,109 @@ public class ApiLesApplication implements CommandLineRunner {
 		client.setUser(user);
 		client.setBillingAddress(billingAddres);
 		client.setDeliveryAddresses(Arrays.asList(deliveryAddresses1, deliveryAddresses2));
-		client.getDeliveryAddresses().stream().forEach(a -> a.setClient(client));
-		deliveryAddresses1.setClient(client);
-		deliveryAddresses2.setClient(client);
-		Filter<Client> filter = new Filter<Client>(client, Client.class);
-		clientDao.save(filter);
-//		addressRepository.save(deliveryAddresses1);
-//		addressRepository.save(deliveryAddresses2);
+
+		clientDao.save(new Filter<Client>(client, Client.class));
+
+		Employee employee = new Employee();
+		employee.setCpf("43199999999");
+		employee.setName("matheus");
+		user = new User();
+
+		user.setEmail("employee");
+		user.setPassword(bCryptPasswordEncoder.encode("employee"));
+		user.setPermission(PermissionEnum.EMPLOYEE);
+		employee.setUser(user);
+		employeeDAO.save(new Filter<Employee>(employee, Employee.class));
+
+		var recorderList = Arrays.asList(createRecorder("Sony music"), createRecorder("Warner records"));
+		recorderList.forEach(r -> recorderDAO.save(new Filter<Recorder>(r, Recorder.class)));
+
+		var artistArray = Arrays.asList(createArtist("Daft Punk"), createArtist("Tim maia"));
+		artistArray.forEach(a -> artistDAO.save(new Filter<Artist>(a, Artist.class)));
+
+		var genreArray = Arrays.asList(createGenre("Eletronic", "lo fi hip hop beats to study and relax to"),
+				createGenre("Soul", "Musica para a alma"));
+		genreArray.forEach(g -> genreDAO.save(new Filter<Genre>(g, Genre.class)));
+
+		var pricingArray = Arrays.asList(
+				createPricing(1, "Discos nacionais", 0.7, createSale(0.5, SaleStatusEnum.INATIVE)),
+				createPricing(1.5, "Discos internacionais", 1, createSale(1, SaleStatusEnum.ACTIVE)));
+		pricingArray.forEach(p -> pricingDAO.save(new Filter<Pricing>(p, Pricing.class)));
+
+
+		var activationDetails = new ActivationDetails();
+		activationDetails.setCategory("ACTIVATION");
+		activationDetails.setMotive("FORA_DE_MERCADO");
+
+		
+		var stock = new Stock();
+		stock.setCostPrice(5);
+		stock.setPurchaceDate(new Date());
+		stock.setQuantity(10);
+		Disc disc = createDisc(activationDetails, true, artistArray, "aaa", "O melhor disco", genreArray, "https://i.ytimg.com/vi/Rk-iL39ve8Q/hqdefault.jpg",
+				"Furacao 2020", pricingArray.get(0), recorderList.get(0), new Date(), "Qurs", 100,Arrays.asList(stock));
+		
+//		stockDAO.save(new Filter<Stock>(stock, Stock.class));
+		
+		discDAO.save(new Filter<Disc>(disc, Disc.class));
+
+	}
+
+	private Recorder createRecorder(String name) {
+		Recorder recorder = new Recorder();
+		recorder.setName(name);
+		return recorder;
+	}
+
+	private Artist createArtist(String name) {
+		Artist artist = new Artist();
+		artist.setName(name);
+		return artist;
+	}
+
+	private Genre createGenre(String name, String description) {
+		Genre g = new Genre();
+		g.setName(name);
+		g.setDescription(description);
+		return g;
+	}
+
+	private Sale createSale(double profit, SaleStatusEnum status) {
+		var sale = new Sale();
+		sale.setProfit(profit);
+		sale.setStatus(status);
+		return sale;
+	}
+
+	private Pricing createPricing(double dprofit, String description, double mprofit, Sale sale) {
+		Pricing pricing = new Pricing();
+		pricing.setDefautProfit(dprofit);
+		pricing.setDescription("Discos nacionais");
+		pricing.setMinimumProfit(0.7);
+		pricing.setSale(sale);
+		return pricing;
+	}
+
+	private Disc createDisc(ActivationDetails activationDetails, boolean active, List<Artist> artists, String code,
+			String description, List<Genre> genres, String imgLink, String name, Pricing pricing, Recorder recorder,
+			Date releaseDate, String status, double value ,List<Stock> stock) {
+		Disc disc = new Disc();
+		disc.setActivationDetails(activationDetails);
+		disc.setActive(active);
+		disc.setArtists(artists);
+		disc.setCode(code);
+		disc.setDescription(description);
+		disc.setGenres(genres);
+		disc.setImgLink(imgLink);
+		disc.setName(name);
+		disc.setPricing(pricing);
+		disc.setRecorder(recorder);
+		disc.setReleaseDate(releaseDate);
+		disc.setStatus(status);
+		disc.setValue(value);
+		disc.setStock(stock);
+		return disc;
+
 	}
 
 }
