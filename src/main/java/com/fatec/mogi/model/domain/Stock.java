@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -17,6 +18,7 @@ public class Stock extends DomainEntity {
 	@Column(nullable = false)
 	private int quantity;
 	@ManyToOne
+	@JoinColumn(name = "disc_stock_id", referencedColumnName = "id")
 	private Disc disc;
 	@Column(nullable = false)
 	private double costPrice;
