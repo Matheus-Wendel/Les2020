@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.fatec.mogi.DAO.ArtistDAO;
+import com.fatec.mogi.DAO.CartProductDAO;
 import com.fatec.mogi.DAO.ClientDAO;
 import com.fatec.mogi.DAO.DiscDAO;
 import com.fatec.mogi.DAO.EmployeeDAO;
@@ -27,6 +28,7 @@ import com.fatec.mogi.model.domain.Address;
 import com.fatec.mogi.model.domain.Artist;
 import com.fatec.mogi.model.domain.CardBrand;
 import com.fatec.mogi.model.domain.Cart;
+import com.fatec.mogi.model.domain.CartProduct;
 import com.fatec.mogi.model.domain.City;
 import com.fatec.mogi.model.domain.Client;
 import com.fatec.mogi.model.domain.CreditCard;
@@ -60,6 +62,8 @@ public class ApiLesApplication implements CommandLineRunner {
 
 	@Autowired
 	DiscDAO discDAO;
+	@Autowired
+	CartProductDAO cartProductDAO;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ApiLesApplication.class, args);
@@ -189,6 +193,15 @@ public class ApiLesApplication implements CommandLineRunner {
 //		stockDAO.save(new Filter<Stock>(stock, Stock.class));
 		
 		discDAO.save(new Filter<Disc>(disc, Disc.class));
+		
+		CartProduct cartProduct = new CartProduct();
+		cartProduct.setAddedDate(new Date());
+		cartProduct.setDisc(disc);
+		cartProduct.setQuantity(2);
+		cartProduct.setCart(client.getCart());
+		
+		cartProductDAO.save(new Filter<CartProduct>(cartProduct,CartProduct.class));
+		
 
 	}
 
