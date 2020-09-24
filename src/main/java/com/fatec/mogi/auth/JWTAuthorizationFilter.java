@@ -2,6 +2,7 @@ package com.fatec.mogi.auth;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -10,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -18,41 +21,50 @@ import com.auth0.jwt.algorithms.Algorithm;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
-    public JWTAuthorizationFilter(AuthenticationManager authManager) {
-        super(authManager);
-    }
+	public JWTAuthorizationFilter(AuthenticationManager authManager) {
+		super(authManager);
+	}
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest req,
-                                    HttpServletResponse res,
-                                    FilterChain chain) throws IOException, ServletException {
-        String header = req.getHeader(SecurityConstants.HEADER_STRING);
+	@Override
+	protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
+			throws IOException, ServletException {
+		String header = req.getHeader(SecurityConstants.HEADER_STRING);
+		if (header == null || !header.startsWith(SecurityConstants.TOKEN_PREFIX)) {
+			chain.doFilter(req, res);
+			return;
+		}
 
-        if (header == null || !header.startsWith(SecurityConstants.TOKEN_PREFIX)) {
-            chain.doFilter(req, res);
-            return;
-        }
+		UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		chain.doFilter(req, res);
+	}
 
-        UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
+	private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
+		String token = request.getHeader(SecurityConstants.HEADER_STRING);
+		if (token != null) {
+			// parse the token.
+			String user = JWT.require(Algorithm.HMAC512(SecurityConstants.SECRET.getBytes())).build()
+					.verify(token.replace(SecurityConstants.TOKEN_PREFIX, "")).getSubject();
+			var authority = JWT.require(Algorithm.HMAC512(SecurityConstants.SECRET.getBytes())).build()
+					.verify(token.replace(SecurityConstants.TOKEN_PREFIX, "")).getClaims();
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        chain.doFilter(req, res);
-    }
+			if (user != null) {
+				return new UsernamePasswordAuthenticationToken(user, null,
+						getAuthorities(authority.get(SecurityConstants.AUTH_CLAIM).asString()));
+			}
+			return null;
+		}
+		return null;
+	}
 
-    private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
-        String token = request.getHeader(SecurityConstants.HEADER_STRING);
-        if (token != null) {
-            // parse the token.
-            String user = JWT.require(Algorithm.HMAC512(SecurityConstants.SECRET.getBytes()))
-                    .build()
-                    .verify(token.replace(SecurityConstants.TOKEN_PREFIX, ""))
-                    .getSubject();
+	private static Collection<? extends GrantedAuthority> getAuthorities(String authClaim) {
 
-            if (user != null) {
-                return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
-            }
-            return null;
-        }
-        return null;
-    }
+		// CRIA UMA LISTA DE PERMISSOES
+		// A QUAL SERA A ATRIBUIDA A ELA AS PERMICOES QUE OS NOMES ESTAO SALVOS NO
+		// PROPRIO USUARIO( usuario.getPermissao() )
+		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+		authorities.add(new SimpleGrantedAuthority(authClaim));
+
+		return authorities;
+	}
 }

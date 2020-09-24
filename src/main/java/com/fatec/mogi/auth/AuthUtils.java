@@ -40,4 +40,8 @@ private static UserRepository userRepository;
 		return userRepository.findByEmail(email);
 		
 	}
+	public static User getUserByEmail(String email) {
+		return userRepository.findByEmail(email);
+		
+	}
 }

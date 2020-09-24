@@ -11,22 +11,18 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.fatec.mogi.model.domain.Client;
-import com.fatec.mogi.repository.ClientRepository;
+import com.fatec.mogi.model.domain.User;
+import com.fatec.mogi.repository.UserRepository;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
-	private ClientRepository clientRepository;
+	private UserRepository userRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		Client client = clientRepository.findByUserEmail(email);
-		if(client==null) {
-			throw new UsernameNotFoundException(email);			
-		}
-		com.fatec.mogi.model.domain.User user = client.getUser();
+		User user= userRepository.findByEmail(email);
 		if (user == null) {
 			throw new UsernameNotFoundException(email);
 		}
@@ -41,7 +37,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		// PROPRIO USUARIO( usuario.getPermissao() )
 		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		authorities.add(new SimpleGrantedAuthority(user.getPermission().toString()));
-
+//for (GrantedAuthority grantedAuthority : authorities) {
+//	System.err.println(grantedAuthority);
+//}
 		return authorities;
 	}
 
