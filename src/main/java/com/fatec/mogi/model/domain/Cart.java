@@ -7,7 +7,15 @@ import javax.persistence.OneToMany;
 
 @Entity
 public class Cart extends DomainEntity {
-	@OneToMany
+	@OneToMany(mappedBy = "cart")
 	private List<CartProduct> CartProducts;
-	
+
+	public List<CartProduct> getCartProducts() {
+		return CartProducts;
+	}
+
+	public void setCartProducts(List<CartProduct> cartProducts) {
+		CartProducts = cartProducts;
+	}
+
 }
