@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fatec.mogi.repository.CardBrandRepository;
+import com.fatec.mogi.repository.CartProductRepository;
 import com.fatec.mogi.repository.CityRepository;
 import com.fatec.mogi.repository.ClientRepository;
 import com.fatec.mogi.repository.DiscRepository;
@@ -27,6 +28,8 @@ public class StrategyUtil {
 	
 	@Autowired
 	DiscRepository discRepository;
+	@Autowired
+	CartProductRepository cartProductRepository;
 
 	public Map<String, List<IStrategy>> getStrategies() {
 		// Strategies Lists
@@ -35,6 +38,7 @@ public class StrategyUtil {
 		List<IStrategy> addressValidations = new ArrayList<>();
 		List<IStrategy> creditCardValidations = new ArrayList<>();
 		List<IStrategy> cartProductsValidations = new ArrayList<>();
+		List<IStrategy> cartProductsDeleteValidations = new ArrayList<>();
 
 		// Strategies Instances
 		AddressValidation addressValidation = new AddressValidation(cityRepository);
@@ -42,12 +46,14 @@ public class StrategyUtil {
 		ClientUpdateValidation clientUpdateValidation = new ClientUpdateValidation(addressValidation);
 		CreditCardValidation creditCardValidation = new CreditCardValidation(cardBrandRepository);
 		CartProductValidation cartProductValidation = new CartProductValidation(discRepository);
+		CartProductDeleteValidation cartProductDeleteValidation = new CartProductDeleteValidation(discRepository, cartProductRepository);
 		// Filling the lists
 		clientValidations.add(clientValidation);
 		addressValidations.add(addressValidation);
 		creditCardValidations.add(creditCardValidation);
 		clientUpdateValidations.add(clientUpdateValidation);
 		cartProductsValidations.add(cartProductValidation);
+		cartProductsDeleteValidations.add(cartProductDeleteValidation);
 
 		// Strategy map
 		Map<String, List<IStrategy>> strategiesMap = new HashMap<>();
@@ -59,6 +65,7 @@ public class StrategyUtil {
 		strategiesMap.put("address" + CrudOperationEnum.UPDATE.name(), addressValidations);
 		strategiesMap.put("creditcard" + CrudOperationEnum.SAVE.name(), creditCardValidations);
 		strategiesMap.put("cartproduct" + CrudOperationEnum.SAVE.name(), cartProductsValidations);
+		strategiesMap.put("cartproduct" + CrudOperationEnum.DELETE.name(), cartProductsDeleteValidations);
 
 		return strategiesMap;
 	}
