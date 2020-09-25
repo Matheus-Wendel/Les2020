@@ -32,4 +32,11 @@ public class CartProductDAO extends AbstractDAO<CartProduct> {
 		return super.save(filter);
 	}
 
+	
+	@Override
+	public Result delete(Filter<? extends DomainEntity> filter) {
+		var cartProduct = (CartProduct) filter.getEntity();
+		stockRepository.saveAll(cartProduct.getDisc().getStock());
+		return super.delete(filter);
+	}
 }
