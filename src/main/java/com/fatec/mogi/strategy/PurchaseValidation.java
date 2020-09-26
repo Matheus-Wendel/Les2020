@@ -12,13 +12,17 @@ import com.fatec.mogi.enumeration.SaleStatusEnum;
 import com.fatec.mogi.model.domain.CartProduct;
 import com.fatec.mogi.model.domain.DomainEntity;
 import com.fatec.mogi.model.domain.Purchase;
+import com.fatec.mogi.model.domain.PurchaseCard;
 import com.fatec.mogi.model.domain.PurchaseItem;
 import com.fatec.mogi.model.domain.Stock;
+import com.fatec.mogi.repository.CreditCardRepository;
 
 public class PurchaseValidation implements IStrategy {
 
+	CreditCardRepository creditCardRepository;
 
-	public PurchaseValidation() {
+	public PurchaseValidation(CreditCardRepository creditCardRepository) {
+		this.creditCardRepository = creditCardRepository;
 	}
 
 	@Override
@@ -27,45 +31,60 @@ public class PurchaseValidation implements IStrategy {
 		var sb = new StringBuilder();
 
 		var client = AuthUtils.getLoggedClient();
-		if(client.getCart().getCartProducts().isEmpty()) {
+		if (client.getCart().getCartProducts().isEmpty()) {
 			sb.append("Carrinho de compras vazio");
 		}
-		if(purchase.getPurchaseCards().isEmpty()&&purchase.getCoupons().isEmpty()) {
+		if (purchase.getPurchaseCards().isEmpty() && purchase.getCoupons().isEmpty()) {
 			sb.append("Nenhuma forma de pagamento selecionada");
 		}
-		if(sb.length()>0) {
+		if (purchase.getDeliveryAddress() == null) {
+			sb.append("Endereço de entrega não selecionado");
+		}
+		if (purchase.getPurchaseCards() != null) {
+			for (PurchaseCard purchaseCard : purchase.getPurchaseCards()) {
+				var card = creditCardRepository.findById(purchaseCard.getCreditCard().getId());
+				if (card.isPresent()) {
+					if (!card.get().isVailid()) {
+						sb.append("Um ou mais cartões selecionados são invalidos");
+						break;
+					}
+				}
+			}
+		}
+
+		if (sb.length() > 0) {
 			return sb.toString();
 		}
 		var cartProducts = client.getCart().getCartProducts();
 		double purchaseValue = 0;
-		List<PurchaseItem>  purchaseItems= new ArrayList<>();
+		List<PurchaseItem> purchaseItems = new ArrayList<>();
 		for (CartProduct cartProduct : cartProducts) {
-			Stock MaxValuestock = Collections.max(cartProduct.getDisc().getStock(), Comparator.comparing(s -> s.getCostPrice()));
-			
+			Stock MaxValuestock = Collections.max(cartProduct.getDisc().getStock(),
+					Comparator.comparing(s -> s.getCostPrice()));
+
 			double discPriceProfit = 0;
-			if(cartProduct.getDisc().getPricing().getSale().getStatus()==SaleStatusEnum.ACTIVE) {
+			if (cartProduct.getDisc().getPricing().getSale().getStatus() == SaleStatusEnum.ACTIVE) {
 				discPriceProfit = cartProduct.getDisc().getPricing().getSale().getProfit();
-			}else {
-				discPriceProfit= cartProduct.getDisc().getPricing().getDefautProfit();
+			} else {
+				discPriceProfit = cartProduct.getDisc().getPricing().getDefautProfit();
 			}
-			
-			purchaseValue += discPriceProfit*MaxValuestock.getCostPrice()*cartProduct.getQuantity();
+
+			purchaseValue += discPriceProfit * MaxValuestock.getCostPrice() * cartProduct.getQuantity();
 			for (int i = 0; i < cartProduct.getQuantity(); i++) {
-				purchaseItems.add(new PurchaseItem(PurchaseItemEnum.PROCESSING,cartProduct.getDisc()));
-				
+				purchaseItems.add(new PurchaseItem(PurchaseItemEnum.PROCESSING, cartProduct.getDisc()));
+
 			}
 		}
-		double valueSum =purchase.getPurchaseCards().stream().mapToDouble(s -> s.getValue()).sum();
-		if(purchaseValue!=valueSum ) {
+		double valueSum = purchase.getPurchaseCards().stream().mapToDouble(s -> s.getValue()).sum();
+		if (purchaseValue != valueSum) {
 			var firstCard = purchase.getPurchaseCards().get(0);
-			//adiciona diferença a o ultimo cartão
-			firstCard.setValue(firstCard.getValue()+purchaseValue-valueSum);
+			firstCard.setValue(firstCard.getValue() + purchaseValue - valueSum);
 		}
 		purchase.setClient(client);
 		purchase.setPurchaseDate(new Date());
 		purchase.setValue(purchaseValue);
 		purchase.setPurchaseItems(purchaseItems);
-		
+
 		return sb.toString();
 	}
 

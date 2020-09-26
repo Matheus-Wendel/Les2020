@@ -10,6 +10,7 @@ import com.fatec.mogi.repository.CardBrandRepository;
 import com.fatec.mogi.repository.CartProductRepository;
 import com.fatec.mogi.repository.CityRepository;
 import com.fatec.mogi.repository.ClientRepository;
+import com.fatec.mogi.repository.CreditCardRepository;
 import com.fatec.mogi.repository.DiscRepository;
 import com.fatec.mogi.util.CrudOperationEnum;
 
@@ -18,16 +19,16 @@ public class StrategyUtil {
 
 	@Autowired
 	ClientRepository clientRepository;
-
 	@Autowired
 	CityRepository cityRepository;
 	@Autowired
 	CardBrandRepository cardBrandRepository;
-
 	@Autowired
 	DiscRepository discRepository;
 	@Autowired
 	CartProductRepository cartProductRepository;
+	@Autowired
+	CreditCardRepository creditCardRepository;
 
 	public Map<String, Map<CrudOperationEnum, IStrategy>> getStrategies() {
 		// Strategies maps
@@ -45,7 +46,7 @@ public class StrategyUtil {
 		CartProductValidation cartProductValidation = new CartProductValidation(discRepository);
 		CartProductDeleteValidation cartProductDeleteValidation = new CartProductDeleteValidation(discRepository,
 				cartProductRepository);
-		PurchaseValidation purchaseValidation = new PurchaseValidation();
+		PurchaseValidation purchaseValidation = new PurchaseValidation(creditCardRepository);
 
 		clientMap.put(CrudOperationEnum.SAVE, clientValidation);
 		clientMap.put(CrudOperationEnum.UPDATE, clientUpdateValidation);
