@@ -4,11 +4,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 public class PurchaseCard extends DomainEntity {
 	@Column(nullable = false)
 	private double value;
 	@ManyToOne
+
+	@JsonIgnoreProperties("client")
 	private CreditCard creditCard;
 
 	public double getValue() {
