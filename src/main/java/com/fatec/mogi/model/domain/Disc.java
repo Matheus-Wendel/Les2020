@@ -1,5 +1,7 @@
 package com.fatec.mogi.model.domain;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -11,17 +13,19 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fatec.mogi.enumeration.SaleStatusEnum;
 import com.fatec.mogi.util.ConstantsUtil;
 
 @Entity
 public class Disc extends DomainEntity {
 	@Column(nullable = false)
 	private boolean active;
-	@Column(nullable = false)
+	@Transient
 	private double value;
 	@Column(nullable = false, unique = true)
 	private String code;
@@ -61,7 +65,15 @@ public class Disc extends DomainEntity {
 	}
 
 	public double getValue() {
-		return value;
+		double discPriceProfit = 0;
+		Stock MaxValuestock = Collections.max(getStock(), Comparator.comparing(s -> s.getCostPrice()));
+		if (getPricing().getSale().getStatus() == SaleStatusEnum.ACTIVE) {
+			discPriceProfit = getPricing().getSale().getProfit();
+		} else {
+			discPriceProfit = getPricing().getDefautProfit();
+		}
+
+		return discPriceProfit * MaxValuestock.getCostPrice();
 	}
 
 	public void setValue(double value) {
