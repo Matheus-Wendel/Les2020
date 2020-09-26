@@ -1,8 +1,6 @@
 package com.fatec.mogi.facade;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +22,7 @@ public class Facade implements IFacade {
 	UserDAO userDAO;
 
 	private Map<String, IDAO> daoMap;
-	private Map<String, List<IStrategy>> mapStrategy;
+	private Map<String, Map<CrudOperationEnum, IStrategy>> mapStrategy;
 
 	@Autowired
 	public Facade(Map<String, IDAO> daoMap, StrategyUtil util) {
@@ -81,33 +79,31 @@ public class Facade implements IFacade {
 		return daoMap.get(daoClassName);
 	}
 
-	private List<IStrategy> getStrategies(String strategyListName) {
-		List<IStrategy> strategyList = mapStrategy.get(strategyListName);
-		if (strategyList == null || strategyList.isEmpty()) {
-			return Collections.<IStrategy>emptyList();
+	private Map<CrudOperationEnum, IStrategy> getStrategies(String strategyListName) {
+		Map<CrudOperationEnum, IStrategy> strategyMap = mapStrategy.get(strategyListName);
+		if (strategyMap == null || strategyMap.isEmpty()) {
+			return new HashMap<CrudOperationEnum, IStrategy>();
 		}
-		return strategyList;
+		return strategyMap;
 	};
 
 	private Map<String, String> processStrategies(Filter<? extends DomainEntity> filter, CrudOperationEnum operation) {
-		List<IStrategy> strategies = getStrategies(filter.getClazz().getSimpleName().toLowerCase() + operation.name());
-		strategies
-				.addAll(getStrategies(filter.getClazz().getSimpleName().toLowerCase() + CrudOperationEnum.ALL.name()));
+		var strategyMap = getStrategies(filter.getClazz().getSimpleName().toLowerCase());
 
 		Map<String, String> messagesMap = new HashMap<>();
+		var strategy = strategyMap.get(operation);
 
-		if (strategies.isEmpty()) {
+		if (strategyMap.isEmpty() || strategy == null) {
 			return messagesMap;
 		}
 
 		DomainEntity entity = filter.getEntity();
 
-		for (IStrategy strategy : strategies) {
-			String processResult = strategy.process(entity);
-			if (!processResult.isBlank()) {
-				messagesMap.put(strategy.getClass().getSimpleName(), processResult);
-			}
+		String processResult = strategy.process(entity);
+		if (!processResult.isBlank()) {
+			messagesMap.put(strategy.getClass().getSimpleName(), processResult);
 		}
+
 		return messagesMap;
 	}
 
