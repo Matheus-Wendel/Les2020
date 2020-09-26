@@ -12,7 +12,7 @@ import org.hibernate.annotations.Where;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Where(clause="active=1")
+@Where(clause = "active=1")
 public class Client extends Person {
 	@Column(nullable = false)
 	private String code;
@@ -30,10 +30,21 @@ public class Client extends Person {
 	@OneToMany(mappedBy = "client")
 	@JsonIgnoreProperties("client")
 	private List<CreditCard> creditCards;
+	@OneToMany(mappedBy = "client")
+	@JsonIgnoreProperties("client")
+	private List<Purchase> purchases;
 	@OneToOne
 	private Cart cart;
 	@Column(name = "active")
 	private boolean active = true;
+
+	public List<Purchase> getPurchases() {
+		return purchases;
+	}
+
+	public void setPurchases(List<Purchase> purchases) {
+		this.purchases = purchases;
+	}
 
 	public boolean getActive() {
 		return active;
@@ -113,8 +124,5 @@ public class Client extends Person {
 				+ ", billingAddress=" + billingAddress + ", deliveryAddresses=" + deliveryAddresses + ", creditCards="
 				+ creditCards + ", cart=" + cart + ", active=" + active + ", getId()=" + getId() + "]";
 	}
-
-
-	
 
 }
