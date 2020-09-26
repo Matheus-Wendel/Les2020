@@ -33,6 +33,7 @@ public class CartProductValidation implements IStrategy {
 		var optionalDisc = discRepository.findById(cartProduct.getDisc().getId());
 		if (optionalDisc.isEmpty()) {
 			sb.append("Disco invalido");
+			return sb.toString();
 		}
 		var disc = optionalDisc.get();
 		int discTotalStock = disc.getStock().stream().mapToInt(s -> s.getQuantity()).sum();
