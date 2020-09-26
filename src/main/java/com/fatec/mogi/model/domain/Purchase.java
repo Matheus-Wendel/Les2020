@@ -5,7 +5,9 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -28,6 +30,17 @@ public class Purchase extends DomainEntity {
 	private List<PurchaseCard> purchaseCards;
 	@OneToMany
 	private List<PurchaseItem> purchaseItems;
+	@ManyToOne
+	@JoinColumn(name = "client_id", referencedColumnName = "id")
+	private Client client;
+
+	public Client getClient() {
+		return client;
+	}
+
+	public void setClient(Client client) {
+		this.client = client;
+	}
 
 	public Date getPurchaseDate() {
 		return purchaseDate;
