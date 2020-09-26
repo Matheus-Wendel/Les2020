@@ -14,6 +14,8 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fatec.mogi.util.ConstantsUtil;
 
 @Entity
@@ -21,6 +23,7 @@ public class Purchase extends DomainEntity {
 	@Column(nullable = false)
 	@DateTimeFormat(pattern = ConstantsUtil.TIMESTAMP_FORMAT)
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(pattern = ConstantsUtil.TIMESTAMP_FORMAT)
 	private Date purchaseDate;
 	@Column(nullable = false)
 	private double value;
@@ -32,7 +35,19 @@ public class Purchase extends DomainEntity {
 	private List<PurchaseItem> purchaseItems;
 	@ManyToOne
 	@JoinColumn(name = "client_id", referencedColumnName = "id")
+	@JsonIgnore
 	private Client client;
+	@ManyToOne
+	@JoinColumn(name = "address_id", referencedColumnName = "id")
+	private Address deliveryAddress;
+
+	public Address getDeliveryAddress() {
+		return deliveryAddress;
+	}
+
+	public void setDeliveryAddress(Address deliveryAddress) {
+		this.deliveryAddress = deliveryAddress;
+	}
 
 	public Client getClient() {
 		return client;
