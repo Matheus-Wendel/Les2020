@@ -82,7 +82,6 @@ public class ClientDAO extends AbstractDAO<Client> {
 			return super.find(filter);
 		}
 		Result result = new Result();
-		System.err.println(AuthUtils.getLoggedClient());
 		result.setResultList(Arrays.asList(AuthUtils.getLoggedClient()));
 		return result;
 	}
@@ -91,6 +90,7 @@ public class ClientDAO extends AbstractDAO<Client> {
 	@Transactional
 	public Result update(Filter<? extends DomainEntity> filter) {
 		var client = (Client) filter.getEntity();
+		
 		var oldClient = AuthUtils.getLoggedClient();
 		client.setId(oldClient.getId());
 		if(client.getBillingAddress()!=null) {

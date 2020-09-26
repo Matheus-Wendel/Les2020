@@ -16,8 +16,6 @@ public class CreditCardValidation implements IStrategy {
 
 	@Override
 	public String process(DomainEntity entity) {
-		System.err.println("aaa");
-		System.err.println(entity.getClass().getSimpleName());
 		var creditCard = (CreditCard) entity;
 		var sb = new StringBuilder();
 		if (creditCard.getCvv()==null||creditCard.getCvv().length() != 3) {
