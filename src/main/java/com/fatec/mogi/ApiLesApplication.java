@@ -177,31 +177,41 @@ public class ApiLesApplication implements CommandLineRunner {
 				createPricing(1.5, "Discos internacionais", 1, createSale(1, SaleStatusEnum.ACTIVE)));
 		pricingArray.forEach(p -> pricingDAO.save(new Filter<Pricing>(p, Pricing.class)));
 
-
 		var activationDetails = new ActivationDetails();
 		activationDetails.setCategory("ACTIVATION");
 		activationDetails.setMotive("FORA_DE_MERCADO");
 
-		
 		var stock = new Stock();
 		stock.setCostPrice(5);
 		stock.setPurchaceDate(new Date());
 		stock.setQuantity(10);
-		Disc disc = createDisc(activationDetails, true, artistArray, "aaa", "O melhor disco", genreArray, "https://i.ytimg.com/vi/Rk-iL39ve8Q/hqdefault.jpg",
-				"Furacao 2020", pricingArray.get(0), recorderList.get(0), new Date(), "Qurs", 100,Arrays.asList(stock));
-		
+		Disc disc = createDisc(activationDetails, true, artistArray, "aaa", "O melhor disco", genreArray,
+				"https://i.ytimg.com/vi/Rk-iL39ve8Q/hqdefault.jpg", "Furacao 2020", pricingArray.get(0),
+				recorderList.get(0), new Date(), "Qurs", 100, Arrays.asList(stock));
+
 //		stockDAO.save(new Filter<Stock>(stock, Stock.class));
-		
+
 		discDAO.save(new Filter<Disc>(disc, Disc.class));
-		
+
+		discDAO.save(new Filter<Disc>(createDisc(createActivationDetails(), true, Arrays.asList(artistArray.get(0)),
+				"code", "Disco ", Arrays.asList(genreArray.get(0)),
+				"https://blogs.esa.int/space19plus/files/2019/03/nebula.jpg", "Album teste", pricingArray.get(1),
+				recorderList.get(1), new Date(), "", 0.0, Arrays.asList(createStock(10, 50), createStock(500, 12))),
+				Disc.class));
+
+		discDAO.save(new Filter<Disc>(createDisc(createActivationDetails(), true, Arrays.asList(artistArray.get(1)),
+				"a", "Disco ", Arrays.asList(genreArray.get(1)),
+				"https://www.hypeness.com.br/wp-content/uploads/2019/09/Vinil_vendas_CD_horizontal.jpg", "Ourto almbum",
+				pricingArray.get(0), recorderList.get(1), new Date(), "", 0.0,
+				Arrays.asList(createStock(20, 50), createStock(25, 12))), Disc.class));
+
 		CartProduct cartProduct = new CartProduct();
 		cartProduct.setAddedDate(new Date());
 		cartProduct.setDisc(disc);
 		cartProduct.setQuantity(2);
 		cartProduct.setCart(client.getCart());
-		
-		cartProductDAO.save(new Filter<CartProduct>(cartProduct,CartProduct.class));
-		
+
+		cartProductDAO.save(new Filter<CartProduct>(cartProduct, CartProduct.class));
 
 	}
 
@@ -240,9 +250,24 @@ public class ApiLesApplication implements CommandLineRunner {
 		return pricing;
 	}
 
+	private Stock createStock(double costPrice, int quantity) {
+		Stock stock = new Stock();
+		stock.setCostPrice(costPrice);
+		stock.setPurchaceDate(new Date());
+		stock.setQuantity(quantity);
+		return stock;
+	}
+
+	private ActivationDetails createActivationDetails() {
+		var activationDetails = new ActivationDetails();
+		activationDetails.setCategory("ACTIVATION");
+		activationDetails.setMotive("FORA_DE_MERCADO");
+		return activationDetails;
+	}
+
 	private Disc createDisc(ActivationDetails activationDetails, boolean active, List<Artist> artists, String code,
 			String description, List<Genre> genres, String imgLink, String name, Pricing pricing, Recorder recorder,
-			Date releaseDate, String status, double value ,List<Stock> stock) {
+			Date releaseDate, String status, double value, List<Stock> stock) {
 		Disc disc = new Disc();
 		disc.setActivationDetails(activationDetails);
 		disc.setActive(active);
