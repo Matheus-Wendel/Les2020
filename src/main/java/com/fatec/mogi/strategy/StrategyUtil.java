@@ -47,6 +47,8 @@ public class StrategyUtil {
 		CartProductDeleteValidation cartProductDeleteValidation = new CartProductDeleteValidation(discRepository,
 				cartProductRepository);
 		PurchaseValidation purchaseValidation = new PurchaseValidation(creditCardRepository);
+		CartProductUpdateValidation cartProductUpdateValidation = new CartProductUpdateValidation(discRepository,
+				cartProductRepository);
 
 		clientMap.put(CrudOperationEnum.SAVE, clientValidation);
 		clientMap.put(CrudOperationEnum.UPDATE, clientUpdateValidation);
@@ -58,6 +60,7 @@ public class StrategyUtil {
 
 		cartProductMap.put(CrudOperationEnum.SAVE, cartProductValidation);
 		cartProductMap.put(CrudOperationEnum.DELETE, cartProductDeleteValidation);
+		cartProductMap.put(CrudOperationEnum.UPDATE, cartProductUpdateValidation);
 
 		purchaseMap.put(CrudOperationEnum.SAVE, purchaseValidation);
 		// Filling the lists
