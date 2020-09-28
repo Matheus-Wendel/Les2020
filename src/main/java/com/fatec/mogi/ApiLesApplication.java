@@ -201,7 +201,7 @@ public class ApiLesApplication implements CommandLineRunner {
 
 		discDAO.save(new Filter<Disc>(createDisc(createActivationDetails(), true, Arrays.asList(artistArray.get(1)),
 				"a", "Disco ", Arrays.asList(genreArray.get(1)),
-				"https://www.hypeness.com.br/wp-content/uploads/2019/09/Vinil_vendas_CD_horizontal.jpg", "Ourto almbum",
+				"https://guiaturismobrasil.eco.br/wp-content/uploads/2020/03/kit-disco-de-vinil-pequeno-06-unidades-D_NQ_NP_951092-MLB25672011419_062017-F.jpg", "Ourto almbum",
 				pricingArray.get(0), recorderList.get(1), new Date(), "", 0.0,
 				Arrays.asList(createStock(20, 50), createStock(25, 12))), Disc.class));
 
