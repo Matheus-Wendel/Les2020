@@ -27,6 +27,8 @@ public class Disc extends DomainEntity {
 	private boolean active;
 	@Transient
 	private double value;
+	@Transient
+	private int totalStock;
 	@Column(nullable = false, unique = true)
 	private String code;
 	@Column(nullable = false)
@@ -62,6 +64,15 @@ public class Disc extends DomainEntity {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public int getTotalStock() {
+		return this.getStock().stream().mapToInt(s -> s.getQuantity()).sum();
+		
+	}
+
+	public void setTotalStock(int totalStock) {
+		this.totalStock = totalStock;
 	}
 
 	public double getValue() {
