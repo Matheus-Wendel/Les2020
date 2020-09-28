@@ -46,8 +46,8 @@ public class AbstractController<T extends DomainEntity> {
 		return findCommand.execute(filter).buildResponse();
 	}
 
-	@DeleteMapping
-	public ResponseEntity delete(@RequestBody(required = true) T  entity) {
+	public ResponseEntity delete(T  entity) {
+		System.err.println(entity);
 		Filter<T> filter =new Filter<T>(entity,clazz);
 		return deleteCommand.execute(filter).buildResponse();
 	}

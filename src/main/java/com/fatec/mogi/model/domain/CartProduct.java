@@ -16,6 +16,13 @@ import com.fatec.mogi.util.ConstantsUtil;
 
 @Entity
 public class CartProduct extends DomainEntity {
+	
+	@Override
+	public String toString() {
+		return "CartProduct [quantity=" + quantity + ", disc=" + disc + ", cart=" + cart + ", AddedDate=" + AddedDate
+				+ ", getId()=" + getId() + "]";
+	}
+
 	@Column(nullable = false)
 	private int quantity;
 	@ManyToOne

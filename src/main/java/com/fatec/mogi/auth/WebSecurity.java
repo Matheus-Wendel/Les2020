@@ -31,6 +31,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter{
 	                .antMatchers(HttpMethod.GET, AccessRoutesUtil.GET_FREE_ACCESS_ROUTES).permitAll()
 	                .antMatchers(HttpMethod.POST, AccessRoutesUtil.POST_CLIENT_ACCESS_ROUTES).hasAuthority(PermissionEnum.CLIENT.name())
 	                .antMatchers(HttpMethod.PUT, AccessRoutesUtil.PUT_CLIENT_ACCESS_ROUTES).hasAuthority(PermissionEnum.CLIENT.name())
+	                .antMatchers(HttpMethod.DELETE, AccessRoutesUtil.DELETE_CLIENT_ACCESS_ROUTES).hasAuthority(PermissionEnum.CLIENT.name())
 	                .antMatchers(HttpMethod.POST, AccessRoutesUtil.POST_EMPLOYEE_ACCESS_ROUTES).hasAnyAuthority(PermissionEnum.EMPLOYEE.name(),PermissionEnum.SALES_MANAGER.name())
 	                .antMatchers(HttpMethod.PUT, AccessRoutesUtil.PUT_EMPLOYEE_ACCESS_ROUTES).hasAnyAuthority(PermissionEnum.EMPLOYEE.name(),PermissionEnum.SALES_MANAGER.name())
 	                .antMatchers("/h2-console").permitAll()
