@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Address extends DomainEntity {
 
@@ -28,6 +30,7 @@ public class Address extends DomainEntity {
 	
 	@ManyToOne
 	@JoinColumn(name="client_delivery_id", referencedColumnName="id")
+	@JsonIgnore
 	private Client client;
 
 	
