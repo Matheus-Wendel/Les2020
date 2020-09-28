@@ -13,7 +13,7 @@ public class AccessRoutesUtil {
 	"/state" };
 
 	//client only
-	public static final String[] GET_CLIENT_ACCESS_ROUTES = {"/cart","/cartProduct"};
+	public static final String[] GET_CLIENT_ACCESS_ROUTES = {"/cart","/cartProduct","/creditCard","/client"};
 	public static final String[] POST_CLIENT_ACCESS_ROUTES = {"/address","/creditCard","/cart","/cartProduct","/purchase"};
 	public static final String[] DELETE_CLIENT_ACCESS_ROUTES = {"/address","/creditCard","/client","/cartProduct"};
 	

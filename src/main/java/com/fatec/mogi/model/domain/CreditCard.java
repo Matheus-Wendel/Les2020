@@ -13,6 +13,7 @@ import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fatec.mogi.util.ConstantsUtil;
 
 @Entity
@@ -32,6 +33,7 @@ public class CreditCard extends DomainEntity {
 	private boolean vailid;
 	@ManyToOne
 	@JoinColumn(name="client_id", referencedColumnName="id")
+	@JsonIgnore
 	private Client client;
 	@ManyToOne
 	private CardBrand cardBrand;
