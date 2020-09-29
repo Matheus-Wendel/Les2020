@@ -4,6 +4,7 @@ public class AccessRoutesUtil {
 //free routes
 	public static final String[] GET_FREE_ACCESS_ROUTES = {
 	"/disc",
+	"/disc/**",
 	"/artist",
 	"/genre",
 	"/recorder",
