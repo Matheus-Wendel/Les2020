@@ -47,7 +47,6 @@ public class AbstractController<T extends DomainEntity> {
 	}
 
 	public ResponseEntity delete(T  entity) {
-		System.err.println(entity);
 		Filter<T> filter =new Filter<T>(entity,clazz);
 		return deleteCommand.execute(filter).buildResponse();
 	}

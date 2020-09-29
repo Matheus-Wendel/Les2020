@@ -9,5 +9,5 @@ import com.fatec.mogi.model.domain.Disc;
 public interface DiscRepository extends JpaRepository<Disc, Integer> {
 
 	
-	List<Disc> findByNameContaining(String name);
+	List<Disc> findByNameContainingIgnoreCase(String name);
 }

@@ -46,7 +46,7 @@ public class DiscDAO extends AbstractDAO<Disc> {
 		var disc = (Disc) filter.getEntity();
 		if (disc != null && disc.getName() != null && !disc.getName().isBlank()) {
 			Result result = new Result();
-			result.setResultList(discRepository.findByNameContaining(disc.getName()));
+			result.setResultList(discRepository.findByNameContainingIgnoreCase(disc.getName()));
 			return result;
 		}
 		return super.find(filter);
