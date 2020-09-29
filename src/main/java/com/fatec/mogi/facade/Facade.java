@@ -101,7 +101,7 @@ public class Facade implements IFacade {
 
 		String processResult = strategy.process(entity);
 		if (!processResult.isBlank()) {
-			messagesMap.put(strategy.getClass().getSimpleName(), processResult);
+			messagesMap.put("error", processResult);
 		}
 
 		return messagesMap;
