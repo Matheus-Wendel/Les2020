@@ -186,7 +186,7 @@ public class ApiLesApplication implements CommandLineRunner {
 		stock.setPurchaceDate(new Date());
 		stock.setQuantity(10);
 		Disc disc = createDisc(activationDetails, true, artistArray, "aaa", "O melhor disco", genreArray,
-				"https://i.ytimg.com/vi/Rk-iL39ve8Q/hqdefault.jpg", "Furacao 2020", pricingArray.get(0),
+				"https://www.planocritico.com/wp-content/uploads/2015/02/daft-punk-columbia-1013x1024.jpg", "Random Access Memories", pricingArray.get(0),
 				recorderList.get(0), new Date(), "Qurs", 100, Arrays.asList(stock));
 
 //		stockDAO.save(new Filter<Stock>(stock, Stock.class));
@@ -195,13 +195,13 @@ public class ApiLesApplication implements CommandLineRunner {
 
 		discDAO.save(new Filter<Disc>(createDisc(createActivationDetails(), true, Arrays.asList(artistArray.get(0)),
 				"code", "Disco ", Arrays.asList(genreArray.get(0)),
-				"https://blogs.esa.int/space19plus/files/2019/03/nebula.jpg", "Album teste", pricingArray.get(1),
+				"https://i.pinimg.com/originals/fe/14/ee/fe14ee75b997b5434c760ad5d9d816a2.jpg", "In Tongues cover", pricingArray.get(1),
 				recorderList.get(1), new Date(), "", 0.0, Arrays.asList(createStock(10, 50), createStock(500, 12))),
 				Disc.class));
 
 		discDAO.save(new Filter<Disc>(createDisc(createActivationDetails(), true, Arrays.asList(artistArray.get(1)),
 				"a", "Disco ", Arrays.asList(genreArray.get(1)),
-				"https://guiaturismobrasil.eco.br/wp-content/uploads/2020/03/kit-disco-de-vinil-pequeno-06-unidades-D_NQ_NP_951092-MLB25672011419_062017-F.jpg", "Ourto almbum",
+				"https://lastfm.freetls.fastly.net/i/u/770x0/0f6c7e1323f12f50659c072eda4749bd.jpg", "Come Over When You're Sober",
 				pricingArray.get(0), recorderList.get(1), new Date(), "", 0.0,
 				Arrays.asList(createStock(20, 50), createStock(25, 12))), Disc.class));
 
