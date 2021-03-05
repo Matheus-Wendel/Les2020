@@ -40,6 +40,7 @@ import com.fatec.mogi.model.domain.Recorder;
 import com.fatec.mogi.model.domain.Sale;
 import com.fatec.mogi.model.domain.Stock;
 import com.fatec.mogi.model.domain.User;
+import com.fatec.mogi.repository.CreditCardRepository;
 
 @SpringBootApplication()
 public class ApiLesApplication implements CommandLineRunner {
@@ -64,6 +65,10 @@ public class ApiLesApplication implements CommandLineRunner {
 	DiscDAO discDAO;
 	@Autowired
 	CartProductDAO cartProductDAO;
+	
+	@Autowired
+	CreditCardRepository creditCardRepository;
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(ApiLesApplication.class, args);
@@ -138,7 +143,6 @@ public class ApiLesApplication implements CommandLineRunner {
 		billingAddres.setNumber("4");
 		billingAddres.setCity(bACity);
 
-		client.setCode("UNIQUECODE CHANGE TO ID?");
 		client.setCpf("44444444444");
 		client.setGenre("M");
 		client.setName("Eu da Silva");
@@ -148,8 +152,12 @@ public class ApiLesApplication implements CommandLineRunner {
 		client.setUser(user);
 		client.setBillingAddress(billingAddres);
 		client.setDeliveryAddresses(Arrays.asList(deliveryAddresses1, deliveryAddresses2));
+		creditCard1.setClient(client);
+		creditCard2.setClient(client);
 
 		clientDao.save(new Filter<Client>(client, Client.class));
+		creditCardRepository.save(creditCard1);
+		creditCardRepository.save(creditCard2);
 
 		Employee employee = new Employee();
 		employee.setCpf("43199999999");
@@ -212,6 +220,8 @@ public class ApiLesApplication implements CommandLineRunner {
 		cartProduct.setCart(client.getCart());
 
 		cartProductDAO.save(new Filter<CartProduct>(cartProduct, CartProduct.class));
+		
+		
 
 	}
 
