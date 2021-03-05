@@ -39,7 +39,6 @@ public class ClientUpdateValidation implements IStrategy {
 		if(sb.length()==0) {
 			var oldClient = AuthUtils.getLoggedClient();
 			client.setRanking(oldClient.getRanking());
-			client.setCode(oldClient.getCode());
 			client.setDeliveryAddresses(oldClient.getDeliveryAddresses());
 			client.setCart(oldClient.getCart());
 			client.setCreditCards(oldClient.getCreditCards());

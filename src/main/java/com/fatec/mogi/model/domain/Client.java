@@ -15,8 +15,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Where(clause = "active=1")
 public class Client extends Person {
 	@Column(nullable = false)
-	private String code;
-	@Column(nullable = false)
 	private String genre;
 	@Column(nullable = false)
 	private String telephone;
@@ -62,13 +60,6 @@ public class Client extends Person {
 		this.cart = cart;
 	}
 
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
 
 	public String getGenre() {
 		return genre;
@@ -118,11 +109,5 @@ public class Client extends Person {
 		this.creditCards = creditCards;
 	}
 
-	@Override
-	public String toString() {
-		return "Client [code=" + code + ", genre=" + genre + ", telephone=" + telephone + ", ranking=" + ranking
-				+ ", billingAddress=" + billingAddress + ", deliveryAddresses=" + deliveryAddresses + ", creditCards="
-				+ creditCards + ", cart=" + cart + ", active=" + active + ", getId()=" + getId() + "]";
-	}
 
 }
