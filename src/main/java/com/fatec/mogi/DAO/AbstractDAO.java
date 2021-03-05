@@ -28,8 +28,8 @@ public abstract class AbstractDAO<T extends DomainEntity> implements IDAO {
 			return result;
 		} catch (Exception e) {
 			result.setError(true);
-			result.getMessages().put("Message", e.getMessage());
-			result.getMessages().put("Cause", e.getCause().toString());
+			result.getMessages().put("Mensagem", e.getMessage());
+			result.getMessages().put("Causa", e.getCause().toString());
 			return result;
 		}
 	}
@@ -57,8 +57,8 @@ public abstract class AbstractDAO<T extends DomainEntity> implements IDAO {
 
 		} catch (Exception e) {
 			result.setError(true);
-			result.getMessages().put("Message", e.getMessage());
-			result.getMessages().put("Cause", e.getCause().toString());
+			result.getMessages().put("Mensagem", e.getMessage());
+			result.getMessages().put("Causa", e.getCause().toString());
 			return result;
 		}
 	}
@@ -77,8 +77,8 @@ public abstract class AbstractDAO<T extends DomainEntity> implements IDAO {
 			return result;
 		} catch (Exception e) {
 			result.setError(true);
-			result.getMessages().put("Message", e.getMessage());
-			result.getMessages().put("Cause", e.getCause().toString());
+			result.getMessages().put("Mensagem", e.getMessage());
+			result.getMessages().put("Causa", e.getCause().toString());
 			return result;
 		}
 	}
@@ -98,8 +98,8 @@ public abstract class AbstractDAO<T extends DomainEntity> implements IDAO {
 			return result;
 		} catch (Exception e) {
 			result.setError(true);
-			result.getMessages().put("Message", e.getMessage());
-			result.getMessages().put("Cause", e.getCause().toString());
+			result.getMessages().put("Mensagem", e.getMessage());
+			result.getMessages().put("Causa", e.getCause().toString());
 			return result;
 		}
 	}

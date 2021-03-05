@@ -24,35 +24,34 @@ public class ClientValidation implements IStrategy {
 
 		
 		if (client.getGenre() == null || client.getGenre().isBlank()) {
-			sb.append("Genero Não pode ficar vazio");
+			sb.append("Genero Não pode ficar vazio;;");
 
 		} else {
-			if (client.getGenre().equals("M")&& client.getGenre().equals("F")) {
-				sb.append("Genero Invalido ");
+			if (!client.getGenre().equals("M")&&! client.getGenre().equals("F")) {
+				sb.append("Genero Invalido;;");
 			}
 		}
 		if (client.getTelephone() == null || client.getTelephone().isBlank()) {
-			sb.append("Telefone não pode ficar vazio");
+			sb.append("Telefone não pode ficar vazio;;");
 		}
 
 		if (!(client.getBillingAddress() == null)) {
 			sb.append(addressValidation.process(client.getBillingAddress()));
 		}else {
-			sb.append("Endereço de cobrança vazio");
+			sb.append("Endereço de cobrança vazio;;");
 		}
 		if(!(client.getDeliveryAddresses()==null)) {
 			for (Address address : client.getDeliveryAddresses()) {
 				sb.append(addressValidation.process(address));
 			}
 		}else {
-			sb.append("Ao menos um endereço de envio deve ser cadastrado");
+			sb.append("Ao menos um endereço de envio deve ser cadastrado;;");
 		}
 		var personValidation = new PersonValidation();
 		sb.append(personValidation.process(entity));
 		if(sb.length()==0) {
 			//SAVING A NEW ONE, SETTING DEFAULT VALUES
 			client.setRanking(5);
-			client.setCode("Akamska");
 			client.getUser().setPermission(PermissionEnum.CLIENT);
 			client.setCart(new Cart());
 		}

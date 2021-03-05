@@ -10,13 +10,13 @@ public class PersonValidation implements IStrategy{
 		var person = (Person) entity;
 		var sb = new StringBuilder();
 		if (person.getCpf() == null || person.getCpf().isBlank()) {
-			sb.append("CPF não pode ser vazio");
+			sb.append("CPF não pode ser vazio;;");
 		}
 		if (person.getName() == null || person.getName().isBlank()) {
-			sb.append("Nome não pode ser vazio");
+			sb.append("Nome não pode ser vazio;;");
 		}
 		if (person.getUser()== null) {
-			sb.append("Dados de usuarios invalidos");
+			sb.append("Dados de usuarios invalidos;;");
 		}else {
 			var userValidation = new UserValidation();
 			sb.append(userValidation.process(person.getUser()));
