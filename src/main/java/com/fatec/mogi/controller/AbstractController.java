@@ -1,12 +1,14 @@
 package com.fatec.mogi.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fatec.mogi.command.DeleteCommand;
 import com.fatec.mogi.command.FindCommand;
@@ -41,8 +43,8 @@ public class AbstractController<T extends DomainEntity> {
 	}
 
 	@GetMapping
-	public ResponseEntity find( @RequestBody(required = false) T entity) {
-		Filter<T> filter =new Filter<T>(entity,clazz);
+	public ResponseEntity find(@RequestParam Map<String,String> parameters) {
+		Filter<T> filter =new Filter<T>(parameters,clazz);
 		return findCommand.execute(filter).buildResponse();
 	}
 
