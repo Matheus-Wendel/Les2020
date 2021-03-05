@@ -22,7 +22,8 @@ public class Cart extends DomainEntity {
 	}
 
 	public double getTotal() {
-		return this.CartProducts.stream().mapToDouble(cp->cp.getDisc().getValue()*cp.getQuantity()).sum();
+		return 0;
+		//return this.CartProducts.stream().mapToDouble(cp->cp.getDisc().getValue()*cp.getQuantity()).sum();
 	}
 
 	public void setTotal(double total) {
