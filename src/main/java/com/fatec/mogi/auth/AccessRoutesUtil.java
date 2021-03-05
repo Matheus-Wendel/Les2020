@@ -11,7 +11,8 @@ public class AccessRoutesUtil {
 	"/cardBrand",
 	"/city",
 	"/country",
-	"/state" };
+	"/state",
+	"/test/**" };
 
 	//client only
 	public static final String[] GET_CLIENT_ACCESS_ROUTES = {"/cart","/cartProduct","/creditCard","/client"};
