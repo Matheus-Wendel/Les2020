@@ -18,27 +18,27 @@ public class AddressValidation implements IStrategy {
 		var sb = new StringBuilder();
 
 		if (address.getAddressDescription() == null || address.getAddressDescription().isBlank()) {
-			sb.append("Lougradoro não pode ser vazio ex: Rua da silva...");
+			sb.append("Lougradoro não pode ser vazio ex: Rua da silva...;;");
 		}
 		if (address.getDescription() == null || address.getDescription().isBlank()) {
-			sb.append("Descição do endereço não pode ser vazia ex: casa, apartamento, trabalho...");
+			sb.append("Descição do endereço não pode ser vazia ex: casa, apartamento, trabalho...;;");
 		}
 		if (address.getAddressType() == null || address.getAddressType().isBlank()) {
-			sb.append("Tipo do lougradouro não pode ser Vazio ex: Rua, via, praça");
+			sb.append("Tipo do lougradouro não pode ser Vazio ex: Rua, via, praça;;");
 		}
 		if (address.getDistrict() == null || address.getDistrict().isBlank()) {
-			sb.append("Bairro não pode ficar vazio");
+			sb.append("Bairro não pode ficar vazio;;");
 		}
 		if (address.getNumber() == null || address.getNumber().isBlank()) {
-			sb.append("Numero não pode ficar vazio");
+			sb.append("Numero não pode ficar vazio;;");
 		}
 		if (address.getCity() == null || address.getCity().getId() == null) {
-			sb.append("Cidade não pode ficar vazia");
+			sb.append("Cidade não pode ficar vazia;;");
 		}
 		if (sb.length() == 0) {
 			var exist = cityRepository.existsById(address.getCity().getId());
 			if (!exist) {
-				sb.append("id de cidade Invalida");
+				sb.append("id de cidade Invalida;;");
 			}
 		}
 		return sb.toString();
