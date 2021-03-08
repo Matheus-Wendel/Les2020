@@ -13,7 +13,8 @@ import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fatec.mogi.serializer.DomainEntityIdSerializer;
 import com.fatec.mogi.util.ConstantsUtil;
 
 @Entity
@@ -27,13 +28,13 @@ public class CreditCard extends DomainEntity {
 	private String cvv;
 	@DateTimeFormat(pattern = ConstantsUtil.CREDIT_CARD_EXPIRATION_DATE_FORMAT)
 	@Temporal(TemporalType.DATE)
-	@JsonFormat(pattern = "MM/YYYY")
+	@JsonFormat(pattern = "yyyy-MM")
 	private Date expirationDate;
 	@Column(nullable = false)
 	private boolean vailid;
 	@ManyToOne
 	@JoinColumn(name="client_id", referencedColumnName="id")
-	@JsonIgnore
+	@JsonSerialize(using = DomainEntityIdSerializer.class)
 	private Client client;
 	@ManyToOne
 	private CardBrand cardBrand;

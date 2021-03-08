@@ -5,7 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fatec.mogi.serializer.DomainEntityIdSerializer;
 
 @Entity
 public class Address extends DomainEntity {
@@ -27,13 +28,13 @@ public class Address extends DomainEntity {
 	private String observations;
 	@ManyToOne
 	private City city;
-	
+
 	@ManyToOne
-	@JoinColumn(name="client_delivery_id", referencedColumnName="id")
-	@JsonIgnore
+	@JoinColumn(name = "client_delivery_id", referencedColumnName = "id")
+	@JsonSerialize(using = DomainEntityIdSerializer.class)
+
 	private Client client;
 
-	
 	public Client getClient() {
 		return client;
 	}
@@ -104,7 +105,5 @@ public class Address extends DomainEntity {
 				+ ", addressDescription=" + addressDescription + ", district=" + district + ", observations="
 				+ observations + ", city=" + city + "]";
 	}
-	
-	
 
 }
