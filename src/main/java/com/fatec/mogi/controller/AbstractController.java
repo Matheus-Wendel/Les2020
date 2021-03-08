@@ -1,10 +1,13 @@
 package com.fatec.mogi.controller;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +22,7 @@ import com.fatec.mogi.model.domain.DomainEntity;
 
 @SuppressWarnings("rawtypes")
 public class AbstractController<T extends DomainEntity> {
-	
+
 	@Autowired
 	DeleteCommand deleteCommand;
 	@Autowired
@@ -30,32 +33,35 @@ public class AbstractController<T extends DomainEntity> {
 	UpdateCommand updateCommand;
 
 	Class<? extends DomainEntity> clazz;
-	
-	
+
 	public AbstractController(Class<? extends DomainEntity> clazz) {
 		this.clazz = clazz;
 	}
 
 	@PostMapping
 	public ResponseEntity save(@RequestBody T entity) {
-		Filter<T> filter =new Filter<T>(entity,clazz);
-		return saveCommand.execute(filter).buildResponse(); 
+		Filter<T> filter = new Filter<T>(entity, clazz);
+		return saveCommand.execute(filter).buildResponse();
 	}
 
 	@GetMapping
-	public ResponseEntity find(@RequestParam Map<String,String> parameters) {
-		Filter<T> filter =new Filter<T>(parameters,clazz);
+	public ResponseEntity find(@RequestParam Map<String, String> parameters) {
+		Filter<T> filter = new Filter<T>(parameters, clazz);
 		return findCommand.execute(filter).buildResponse();
 	}
 
-	public ResponseEntity delete(T  entity) {
-		Filter<T> filter =new Filter<T>(entity,clazz);
+	@DeleteMapping("/{id}")
+	public ResponseEntity delete(@PathVariable(required = true) Integer id) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		T entity = (T) this.clazz.getDeclaredConstructor().newInstance();
+		entity.setId(id);
+		
+		Filter<T> filter = new Filter<T>(entity, clazz);
 		return deleteCommand.execute(filter).buildResponse();
 	}
 
 	@PutMapping
-	public ResponseEntity  update(@RequestBody(required = true) T entity) {
-		Filter<T> filter =new Filter<T>(entity,clazz);
+	public ResponseEntity update(@RequestBody(required = true) T entity) {
+		Filter<T> filter = new Filter<T>(entity, clazz);
 		return updateCommand.execute(filter).buildResponse();
 	}
 
