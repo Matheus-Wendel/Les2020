@@ -18,40 +18,40 @@ public class CreditCardValidation implements IStrategy {
 	public String process(DomainEntity entity) {
 		var creditCard = (CreditCard) entity;
 		var sb = new StringBuilder();
-		if (creditCard.getCvv()==null||creditCard.getCvv().length() != 3) {
-			sb.append("CVV invalido");
+		if (creditCard.getCvv() == null || creditCard.getCvv().length() != 3) {
+			sb.append("CVV invalido;;");
 
 		}
-		if (creditCard.getCvv()==null||!creditCard.getCvv().matches("[0-9]+")) {
-			sb.append("CVV deve conter apenas numeros");
+		if (creditCard.getCvv() == null || !creditCard.getCvv().matches("[0-9]+")) {
+			sb.append("CVV deve conter apenas numeros;;");
 		}
 		if (creditCard.getExpirationDate() != null) {
 			if (creditCard.getExpirationDate().compareTo(new Date()) < 0) {
-				sb.append("Data de expiração invalida");
+				sb.append("Data de expiração invalida;;");
 			}
 
 		} else {
-			sb.append("Data de expiração invalida");
+			sb.append("Data de expiração invalida;;");
 		}
-		if (creditCard.getName()==null||creditCard.getName().isBlank()) {
-			sb.append("Nome invalido");
+		if (creditCard.getName() == null || creditCard.getName().isBlank()) {
+			sb.append("Nome invalido;;");
 		}
-		
-		if (creditCard.getNumber()==null||!(creditCard.getNumber().matches("[0-9]+")) || creditCard.getNumber().length() != 16) {
-			sb.append("Numero de cartão invalido");
+
+		if (creditCard.getNumber() == null || !(creditCard.getNumber().matches("[0-9]+"))
+				|| creditCard.getNumber().length() != 16) {
+			sb.append("Numero de cartão invalido;;");
 		}
-		if (creditCard.getCardBrand() != null) {
+		if (creditCard.getCardBrand() != null&&creditCard.getCardBrand().getId()!= null) {
 			if (!cardBrandRepository.existsById(creditCard.getCardBrand().getId())) {
-				sb.append("Bandeira do cartão invalida");
+				sb.append("Bandeira do cartão invalida;;");
 			}
 		} else {
-			sb.append("Bandeira não selecionada");
+			sb.append("Bandeira não selecionada;;");
 		}
-		if(sb.length()==0) {
-			if(creditCard.getCardBrand().getId()==3) {
+		if (sb.length() == 0) {
+			if (creditCard.getCardBrand().getId() == 3) {
 				creditCard.setVailid(false);
-			}
-			else {
+			} else {
 				creditCard.setVailid(true);
 			}
 		}
