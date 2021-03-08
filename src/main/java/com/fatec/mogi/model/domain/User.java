@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fatec.mogi.enumeration.PermissionEnum;
 
 @Entity
@@ -13,6 +14,7 @@ public class User extends DomainEntity {
 	@Column(nullable = false)
 	private String email;
 	@Column(nullable = false)
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String password;
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
