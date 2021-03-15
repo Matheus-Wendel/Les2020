@@ -29,8 +29,6 @@ public class Disc extends DomainEntity {
 	private double value;
 	@Transient
 	private int totalStock;
-	@Column(nullable = false, unique = true)
-	private String code;
 	@Column(nullable = false)
 	private String imgLink;
 	@Column(nullable = false)
@@ -67,7 +65,8 @@ public class Disc extends DomainEntity {
 	}
 
 	public int getTotalStock() {
-		return this.getStock().stream().mapToInt(s -> s.getQuantity()).sum();
+		//return this.getStock().stream().mapToInt(s -> s.getQuantity()).sum();
+		return 0;
 		
 	}
 
@@ -76,28 +75,22 @@ public class Disc extends DomainEntity {
 	}
 
 	public double getValue() {
-		double discPriceProfit = 0;
-		Stock MaxValuestock = Collections.max(getStock(), Comparator.comparing(s -> s.getCostPrice()));
-		if (getPricing().getSale().getStatus() == SaleStatusEnum.ACTIVE) {
-			discPriceProfit = getPricing().getSale().getProfit();
-		} else {
-			discPriceProfit = getPricing().getDefautProfit();
-		}
-
-		return discPriceProfit * MaxValuestock.getCostPrice();
+//		double discPriceProfit = 0;
+//		Stock MaxValuestock = Collections.max(getStock(), Comparator.comparing(s -> s.getCostPrice()));
+//		if (getPricing().getSale().getStatus() == SaleStatusEnum.ACTIVE) {
+//			discPriceProfit = getPricing().getSale().getProfit();
+//		} else {
+//			discPriceProfit = getPricing().getDefautProfit();
+//		}
+//
+//		return discPriceProfit * MaxValuestock.getCostPrice();
+		return 0;
 	}
 
 	public void setValue(double value) {
 		this.value = value;
 	}
 
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
 
 	public String getImgLink() {
 		return imgLink;

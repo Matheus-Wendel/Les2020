@@ -5,10 +5,13 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+import org.hibernate.annotations.Where;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fatec.mogi.enumeration.PermissionEnum;
 
 @Entity
+@Where(clause = "active=1")
 public class User extends DomainEntity {
 
 	@Column(nullable = false)
@@ -19,6 +22,8 @@ public class User extends DomainEntity {
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private PermissionEnum permission;
+	@Column(name = "active")
+	private boolean active = true;
 
 	public String getEmail() {
 		return email;
@@ -42,6 +47,14 @@ public class User extends DomainEntity {
 
 	public void setPermission(PermissionEnum permission) {
 		this.permission = permission;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 }

@@ -193,7 +193,7 @@ public class ApiLesApplication implements CommandLineRunner {
 		stock.setCostPrice(5);
 		stock.setPurchaceDate(new Date());
 		stock.setQuantity(10);
-		Disc disc = createDisc(activationDetails, true, artistArray, "aaa", "O melhor disco", genreArray,
+		Disc disc = createDisc(activationDetails, true, artistArray, "O melhor disco", genreArray,
 				"https://www.planocritico.com/wp-content/uploads/2015/02/daft-punk-columbia-1013x1024.jpg", "Random Access Memories", pricingArray.get(0),
 				recorderList.get(0), new Date(), "Qurs", 100, Arrays.asList(stock));
 
@@ -201,14 +201,12 @@ public class ApiLesApplication implements CommandLineRunner {
 
 		discDAO.save(new Filter<Disc>(disc, Disc.class));
 
-		discDAO.save(new Filter<Disc>(createDisc(createActivationDetails(), true, Arrays.asList(artistArray.get(0)),
-				"code", "Disco ", Arrays.asList(genreArray.get(0)),
+		discDAO.save(new Filter<Disc>(createDisc(createActivationDetails(), true, Arrays.asList(artistArray.get(0)), "Disco ", Arrays.asList(genreArray.get(0)),
 				"https://i.pinimg.com/originals/fe/14/ee/fe14ee75b997b5434c760ad5d9d816a2.jpg", "In Tongues cover", pricingArray.get(1),
 				recorderList.get(1), new Date(), "", 0.0, Arrays.asList(createStock(10, 50), createStock(500, 12))),
 				Disc.class));
 
-		discDAO.save(new Filter<Disc>(createDisc(createActivationDetails(), true, Arrays.asList(artistArray.get(1)),
-				"a", "Disco ", Arrays.asList(genreArray.get(1)),
+		discDAO.save(new Filter<Disc>(createDisc(createActivationDetails(), true, Arrays.asList(artistArray.get(1)), "Disco ", Arrays.asList(genreArray.get(1)),
 				"https://lastfm.freetls.fastly.net/i/u/770x0/0f6c7e1323f12f50659c072eda4749bd.jpg", "Come Over When You're Sober",
 				pricingArray.get(0), recorderList.get(1), new Date(), "", 0.0,
 				Arrays.asList(createStock(20, 50), createStock(25, 12))), Disc.class));
@@ -275,14 +273,13 @@ public class ApiLesApplication implements CommandLineRunner {
 		return activationDetails;
 	}
 
-	private Disc createDisc(ActivationDetails activationDetails, boolean active, List<Artist> artists, String code,
+	private Disc createDisc(ActivationDetails activationDetails, boolean active, List<Artist> artists,
 			String description, List<Genre> genres, String imgLink, String name, Pricing pricing, Recorder recorder,
 			Date releaseDate, String status, double value, List<Stock> stock) {
 		Disc disc = new Disc();
 		disc.setActivationDetails(activationDetails);
 		disc.setActive(active);
 		disc.setArtists(artists);
-		disc.setCode(code);
 		disc.setDescription(description);
 		disc.setGenres(genres);
 		disc.setImgLink(imgLink);

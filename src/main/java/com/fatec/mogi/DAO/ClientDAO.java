@@ -61,6 +61,7 @@ public class ClientDAO extends AbstractDAO<Client> {
 		try {
 			if (repository.existsById(entity.getId())) {
 				this.clientRepository.deactivate(entity.getId());
+				this.userRepository.deactivate(entity.getUser().getId());
 				result.getMessages().put(MessagesUtil.DEACTIVATED, "id: " + entity.getId());
 
 			} else {
