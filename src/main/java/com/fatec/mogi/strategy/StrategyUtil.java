@@ -8,10 +8,12 @@ import org.springframework.stereotype.Service;
 
 import com.fatec.mogi.repository.CardBrandRepository;
 import com.fatec.mogi.repository.CartProductRepository;
+import com.fatec.mogi.repository.CartRepository;
 import com.fatec.mogi.repository.CityRepository;
 import com.fatec.mogi.repository.ClientRepository;
 import com.fatec.mogi.repository.CreditCardRepository;
 import com.fatec.mogi.repository.DiscRepository;
+import com.fatec.mogi.repository.StockRepository;
 import com.fatec.mogi.util.CrudOperationEnum;
 
 @Service
@@ -29,6 +31,10 @@ public class StrategyUtil {
 	CartProductRepository cartProductRepository;
 	@Autowired
 	CreditCardRepository creditCardRepository;
+	@Autowired
+	CartRepository cartRepository;
+	@Autowired
+	StockRepository stockRepository;
 
 	public Map<String, Map<CrudOperationEnum, IStrategy>> getStrategies() {
 		// Strategies maps
@@ -37,18 +43,23 @@ public class StrategyUtil {
 		Map<CrudOperationEnum, IStrategy> creditCardMap = new HashMap<>();
 		Map<CrudOperationEnum, IStrategy> cartProductMap = new HashMap<>();
 		Map<CrudOperationEnum, IStrategy> purchaseMap = new HashMap<>();
+		Map<CrudOperationEnum, IStrategy> cartMap = new HashMap<>();
 
 		// Strategies Instances
 		AddressValidation addressValidation = new AddressValidation(cityRepository);
 		ClientValidation clientValidation = new ClientValidation(clientRepository, addressValidation);
 		ClientUpdateValidation clientUpdateValidation = new ClientUpdateValidation(addressValidation);
 		CreditCardValidation creditCardValidation = new CreditCardValidation(cardBrandRepository);
-		CartProductValidation cartProductValidation = new CartProductValidation(discRepository);
+		CartProductValidation cartProductValidation = new CartProductValidation(discRepository, stockRepository);
 		CartProductDeleteValidation cartProductDeleteValidation = new CartProductDeleteValidation(discRepository,
 				cartProductRepository);
+		
 		PurchaseValidation purchaseValidation = new PurchaseValidation(creditCardRepository);
 		CartProductUpdateValidation cartProductUpdateValidation = new CartProductUpdateValidation(discRepository,
-				cartProductRepository);
+				cartProductRepository, stockRepository, clientRepository);
+		
+		CartUpdateValidation cartUpdateValidation = new CartUpdateValidation(cartRepository,
+				cartProductUpdateValidation);
 
 		clientMap.put(CrudOperationEnum.SAVE, clientValidation);
 		clientMap.put(CrudOperationEnum.UPDATE, clientUpdateValidation);
@@ -62,6 +73,8 @@ public class StrategyUtil {
 		cartProductMap.put(CrudOperationEnum.DELETE, cartProductDeleteValidation);
 		cartProductMap.put(CrudOperationEnum.UPDATE, cartProductUpdateValidation);
 
+		cartMap.put(CrudOperationEnum.UPDATE, cartUpdateValidation);
+
 		purchaseMap.put(CrudOperationEnum.SAVE, purchaseValidation);
 		// Filling the lists
 
@@ -73,6 +86,7 @@ public class StrategyUtil {
 		strategiesMap.put("address", addressMap);
 		strategiesMap.put("creditcard", creditCardMap);
 		strategiesMap.put("cartproduct", cartProductMap);
+		strategiesMap.put("cart", cartMap);
 		strategiesMap.put("purchase", purchaseMap);
 
 		return strategiesMap;
