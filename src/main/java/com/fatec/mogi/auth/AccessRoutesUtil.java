@@ -16,7 +16,7 @@ public class AccessRoutesUtil {
 
 	//client only
 	public static final String[] GET_CLIENT_ACCESS_ROUTES = {"/cart","/cartProduct","/creditCard","/client"};
-	public static final String[] POST_CLIENT_ACCESS_ROUTES = {"/address","/creditCard","/cart","/cartProduct","/purchase"};
+	public static final String[] POST_CLIENT_ACCESS_ROUTES = {"/address","/creditCard","/cart","/cartProduct/add","/purchase"};
 	public static final String[] DELETE_CLIENT_ACCESS_ROUTES = {"/address","/creditCard","/client","/cartProduct"};
 	
 	public static final String[] PUT_CLIENT_ACCESS_ROUTES = { "/client", "/address", "/creditCard","/cartProduct"};
