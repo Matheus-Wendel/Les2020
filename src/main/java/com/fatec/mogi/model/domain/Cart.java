@@ -2,23 +2,24 @@ package com.fatec.mogi.model.domain;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 @Entity
 public class Cart extends DomainEntity {
-	@OneToMany(mappedBy = "cart")
-	private List<CartProduct> CartProducts;
+	@OneToMany(mappedBy = "cart" ,cascade = CascadeType.MERGE)
+	private List<CartProduct> cartProducts;
 
 	@Transient
 	private double total;
 	public List<CartProduct> getCartProducts() {
-		return CartProducts;
+		return cartProducts;
 	}
 
 	public void setCartProducts(List<CartProduct> cartProducts) {
-		CartProducts = cartProducts;
+		this.cartProducts = cartProducts;
 	}
 
 	public double getTotal() {
