@@ -2,6 +2,7 @@ package com.fatec.mogi.model.domain;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -17,15 +18,11 @@ import com.fatec.mogi.util.ConstantsUtil;
 @Entity
 public class CartProduct extends DomainEntity {
 	
-	@Override
-	public String toString() {
-		return "CartProduct [quantity=" + quantity + ", disc=" + disc + ", cart=" + cart + ", AddedDate=" + AddedDate
-				+ ", getId()=" + getId() + "]";
-	}
+	
 
 	@Column(nullable = false)
 	private int quantity;
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.MERGE)
 	private Disc disc;
 
 	@ManyToOne
@@ -66,6 +63,11 @@ public class CartProduct extends DomainEntity {
 
 	public void setAddedDate(Date addedDate) {
 		AddedDate = addedDate;
+	}
+	@Override
+	public String toString() {
+		return "CartProduct [quantity=" + quantity + ", disc=" + disc + ", cart=" + cart + ", AddedDate=" + AddedDate
+				+ ", getId()=" + getId() + "]";
 	}
 
 }
