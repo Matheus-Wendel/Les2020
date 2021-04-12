@@ -193,21 +193,21 @@ public class ApiLesApplication implements CommandLineRunner {
 		stock.setCostPrice(5);
 		stock.setPurchaceDate(new Date());
 		stock.setQuantity(10);
-		Disc disc = createDisc(activationDetails, true, artistArray, "O melhor disco", genreArray,
-				"https://www.planocritico.com/wp-content/uploads/2015/02/daft-punk-columbia-1013x1024.jpg", "Random Access Memories", pricingArray.get(0),
+		Disc disc = createDisc(activationDetails, true, artistArray, "Bowl Cut", genreArray,
+				"https://studiosol-a.akamaihd.net/uploadfile/letras/albuns/7/c/f/a/817421574970931.jpg", "Bowl Cut", pricingArray.get(0),
 				recorderList.get(0), new Date(), "Qurs", 100, Arrays.asList(stock));
 
 //		stockDAO.save(new Filter<Stock>(stock, Stock.class));
 
 		discDAO.save(new Filter<Disc>(disc, Disc.class));
 
-		discDAO.save(new Filter<Disc>(createDisc(createActivationDetails(), true, Arrays.asList(artistArray.get(0)), "Disco ", Arrays.asList(genreArray.get(0)),
-				"https://i.pinimg.com/originals/fe/14/ee/fe14ee75b997b5434c760ad5d9d816a2.jpg", "In Tongues cover", pricingArray.get(1),
+		discDAO.save(new Filter<Disc>(createDisc(createActivationDetails(), true, Arrays.asList(artistArray.get(0)), "World Class", Arrays.asList(genreArray.get(0)),
+				"https://img.discogs.com/zGV9buJV8NGAzOlu7pPFantEVWk=/fit-in/600x600/filters:strip_icc():format(webp):mode_rgb():quality(90)/discogs-images/R-7264886-1548635423-4660.jpeg.jpg", "World Class", pricingArray.get(1),
 				recorderList.get(1), new Date(), "", 0.0, Arrays.asList(createStock(10, 50), createStock(500, 12))),
 				Disc.class));
 
-		discDAO.save(new Filter<Disc>(createDisc(createActivationDetails(), true, Arrays.asList(artistArray.get(1)), "Disco ", Arrays.asList(genreArray.get(1)),
-				"https://lastfm.freetls.fastly.net/i/u/770x0/0f6c7e1323f12f50659c072eda4749bd.jpg", "Come Over When You're Sober",
+		discDAO.save(new Filter<Disc>(createDisc(createActivationDetails(), true, Arrays.asList(artistArray.get(1)), "Melophobia", Arrays.asList(genreArray.get(1)),
+				"https://img.discogs.com/xDy8zBL4J8bUQpqOjzjcmbvCcqE=/fit-in/600x600/filters:strip_icc():format(jpeg):mode_rgb():quality(90)/discogs-images/R-4997585-1393452059-9334.jpeg.jpg", "Melophobia",
 				pricingArray.get(0), recorderList.get(1), new Date(), "", 0.0,
 				Arrays.asList(createStock(20, 50), createStock(25, 12))), Disc.class));
 
