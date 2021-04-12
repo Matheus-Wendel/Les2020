@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
@@ -52,7 +53,7 @@ public class Disc extends DomainEntity {
 	private Pricing pricing;
 	@ManyToOne
 	private Recorder recorder;
-	@OneToMany(mappedBy = "disc")
+	@OneToMany(mappedBy = "disc",cascade = CascadeType.ALL)
 	@JsonIgnoreProperties("disc")
 	private List<Stock> stock;
 
@@ -65,9 +66,11 @@ public class Disc extends DomainEntity {
 	}
 
 	public int getTotalStock() {
-		//return this.getStock().stream().mapToInt(s -> s.getQuantity()).sum();
-		return 0;
-		
+		if(getStock()==null||getStock().isEmpty()) {
+			return 0;
+		}
+		return this.getStock().stream().mapToInt(s -> s.getQuantity()).sum();
+
 	}
 
 	public void setTotalStock(int totalStock) {
@@ -75,16 +78,18 @@ public class Disc extends DomainEntity {
 	}
 
 	public double getValue() {
-//		double discPriceProfit = 0;
-//		Stock MaxValuestock = Collections.max(getStock(), Comparator.comparing(s -> s.getCostPrice()));
-//		if (getPricing().getSale().getStatus() == SaleStatusEnum.ACTIVE) {
-//			discPriceProfit = getPricing().getSale().getProfit();
-//		} else {
-//			discPriceProfit = getPricing().getDefautProfit();
-//		}
-//
-//		return discPriceProfit * MaxValuestock.getCostPrice();
-		return 0;
+		double discPriceProfit = 0;
+		if(getStock()==null||getStock().isEmpty()) {
+			return 0;
+		}
+		Stock MaxValuestock = Collections.max(getStock(), Comparator.comparing(s -> s.getCostPrice()));
+		if (getPricing().getSale().getStatus() == SaleStatusEnum.ACTIVE) {
+			discPriceProfit = getPricing().getSale().getProfit();
+		} else {
+			discPriceProfit = getPricing().getDefautProfit();
+		}
+
+		return discPriceProfit * MaxValuestock.getCostPrice();
 	}
 
 	public void setValue(double value) {
