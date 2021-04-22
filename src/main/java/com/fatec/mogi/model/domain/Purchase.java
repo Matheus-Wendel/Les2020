@@ -28,7 +28,9 @@ public class Purchase extends DomainEntity {
 	@Column(nullable = false)
 	private double value;
 	@ManyToMany
-	private List<Coupon> coupons;
+	private List<Coupon> tradeCoupons;
+	@ManyToOne
+	private Coupon promotionalCoupon;
 	@OneToMany
 	private List<PurchaseCard> purchaseCards;
 	@OneToMany
@@ -40,22 +42,6 @@ public class Purchase extends DomainEntity {
 	@ManyToOne
 	@JoinColumn(name = "address_id", referencedColumnName = "id")
 	private Address deliveryAddress;
-
-	public Address getDeliveryAddress() {
-		return deliveryAddress;
-	}
-
-	public void setDeliveryAddress(Address deliveryAddress) {
-		this.deliveryAddress = deliveryAddress;
-	}
-
-	public Client getClient() {
-		return client;
-	}
-
-	public void setClient(Client client) {
-		this.client = client;
-	}
 
 	public Date getPurchaseDate() {
 		return purchaseDate;
@@ -73,12 +59,20 @@ public class Purchase extends DomainEntity {
 		this.value = value;
 	}
 
-	public List<Coupon> getCoupons() {
-		return coupons;
+	public List<Coupon> getTradeCoupons() {
+		return tradeCoupons;
 	}
 
-	public void setCoupons(List<Coupon> coupons) {
-		this.coupons = coupons;
+	public void setTradeCoupons(List<Coupon> coupons) {
+		this.tradeCoupons = coupons;
+	}
+
+	public Coupon getPromotionalCoupon() {
+		return promotionalCoupon;
+	}
+
+	public void setPromotionalCoupon(Coupon promotionalCoupon) {
+		this.promotionalCoupon = promotionalCoupon;
 	}
 
 	public List<PurchaseCard> getPurchaseCards() {
@@ -95,6 +89,22 @@ public class Purchase extends DomainEntity {
 
 	public void setPurchaseItems(List<PurchaseItem> purchaseItems) {
 		this.purchaseItems = purchaseItems;
+	}
+
+	public Client getClient() {
+		return client;
+	}
+
+	public void setClient(Client client) {
+		this.client = client;
+	}
+
+	public Address getDeliveryAddress() {
+		return deliveryAddress;
+	}
+
+	public void setDeliveryAddress(Address deliveryAddress) {
+		this.deliveryAddress = deliveryAddress;
 	}
 
 }

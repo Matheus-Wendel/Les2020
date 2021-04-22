@@ -34,7 +34,7 @@ public class PurchaseValidation implements IStrategy {
 		if (client.getCart().getCartProducts().isEmpty()) {
 			sb.append("Carrinho de compras vazio");
 		}
-		if (purchase.getPurchaseCards().isEmpty() && purchase.getCoupons().isEmpty()) {
+		if (purchase.getPurchaseCards().isEmpty() && purchase.getTradeCoupons().isEmpty()) {
 			sb.append("Nenhuma forma de pagamento selecionada");
 		}
 		if (purchase.getDeliveryAddress() == null) {

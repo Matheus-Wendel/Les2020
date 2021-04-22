@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
@@ -12,6 +14,7 @@ import javax.persistence.TemporalType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fatec.mogi.enumeration.CouponTypeEnum;
 import com.fatec.mogi.util.ConstantsUtil;
 
 @Entity
@@ -21,11 +24,12 @@ public class Coupon extends DomainEntity {
 	@Column(nullable = false)
 	private boolean active;
 	@Column(nullable = false)
-	private String type;
+	@Enumerated(EnumType.STRING)
+	private CouponTypeEnum type;
 	@Column(nullable = false)
 	@DateTimeFormat(pattern = ConstantsUtil.DATE_FORMAT)
 	@Temporal(TemporalType.DATE)
-	private Date ExpirationDate;
+	private Date expirationDate;
 	@Column(nullable = false)
 	private String code;
 	@ManyToOne
@@ -49,20 +53,22 @@ public class Coupon extends DomainEntity {
 		this.active = active;
 	}
 
-	public String getType() {
+
+
+	public CouponTypeEnum getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(CouponTypeEnum type) {
 		this.type = type;
 	}
 
 	public Date getExpirationDate() {
-		return ExpirationDate;
+		return expirationDate;
 	}
 
 	public void setExpirationDate(Date expirationDate) {
-		ExpirationDate = expirationDate;
+		this.expirationDate = expirationDate;
 	}
 
 	public String getCode() {
