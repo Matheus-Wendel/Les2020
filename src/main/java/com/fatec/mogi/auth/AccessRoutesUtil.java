@@ -12,6 +12,7 @@ public class AccessRoutesUtil {
 	"/city",
 	"/country",
 	"/state",
+	"/coupon",
 	"/test/**" };
 
 	//client only
