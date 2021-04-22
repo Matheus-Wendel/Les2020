@@ -3,6 +3,7 @@ package com.fatec.mogi;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import com.fatec.mogi.DAO.GenreDAO;
 import com.fatec.mogi.DAO.PricingDAO;
 import com.fatec.mogi.DAO.RecorderDAO;
 import com.fatec.mogi.DAO.StockDAO;
+import com.fatec.mogi.enumeration.CouponTypeEnum;
 import com.fatec.mogi.enumeration.PermissionEnum;
 import com.fatec.mogi.enumeration.SaleStatusEnum;
 import com.fatec.mogi.model.aplication.Filter;
@@ -31,6 +33,7 @@ import com.fatec.mogi.model.domain.Cart;
 import com.fatec.mogi.model.domain.CartProduct;
 import com.fatec.mogi.model.domain.City;
 import com.fatec.mogi.model.domain.Client;
+import com.fatec.mogi.model.domain.Coupon;
 import com.fatec.mogi.model.domain.CreditCard;
 import com.fatec.mogi.model.domain.Disc;
 import com.fatec.mogi.model.domain.Employee;
@@ -40,6 +43,7 @@ import com.fatec.mogi.model.domain.Recorder;
 import com.fatec.mogi.model.domain.Sale;
 import com.fatec.mogi.model.domain.Stock;
 import com.fatec.mogi.model.domain.User;
+import com.fatec.mogi.repository.CouponRepository;
 import com.fatec.mogi.repository.CreditCardRepository;
 
 @SpringBootApplication()
@@ -66,6 +70,8 @@ public class ApiLesApplication implements CommandLineRunner {
 	@Autowired
 	CartProductDAO cartProductDAO;
 	
+	@Autowired
+	CouponRepository couponRepository;
 	@Autowired
 	CreditCardRepository creditCardRepository;
 
@@ -219,6 +225,8 @@ public class ApiLesApplication implements CommandLineRunner {
 
 		cartProductDAO.save(new Filter<CartProduct>(cartProduct, CartProduct.class));
 		
+		couponRepository.save(createCoupon(true, null, "123123", new GregorianCalendar(2022	, 12, 1).getTime(), CouponTypeEnum.PROMOTIONAL, 10));
+		couponRepository.save(createCoupon(true, client, "aaa111", new GregorianCalendar(2022	, 12, 1).getTime(), CouponTypeEnum.TRADE, 20	));
 		
 
 	}
@@ -292,6 +300,16 @@ public class ApiLesApplication implements CommandLineRunner {
 		disc.setStock(stock);
 		return disc;
 
+	}
+	private Coupon createCoupon(boolean active, Client client,String code,Date expirationDate, CouponTypeEnum type, double value) {
+		Coupon coupon = new Coupon();
+		coupon.setActive(active);
+		coupon.setClient(client);
+		coupon.setCode(code);
+		coupon.setExpirationDate(expirationDate);
+		coupon.setType(type);
+		coupon.setValue(value);
+		return coupon;
 	}
 
 }
