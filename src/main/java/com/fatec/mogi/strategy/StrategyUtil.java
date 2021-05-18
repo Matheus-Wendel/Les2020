@@ -13,7 +13,10 @@ import com.fatec.mogi.repository.CityRepository;
 import com.fatec.mogi.repository.ClientRepository;
 import com.fatec.mogi.repository.CreditCardRepository;
 import com.fatec.mogi.repository.DiscRepository;
+import com.fatec.mogi.repository.PurchaseItemRepository;
+import com.fatec.mogi.repository.PurchaseRepository;
 import com.fatec.mogi.repository.StockRepository;
+import com.fatec.mogi.repository.TradeRepository;
 import com.fatec.mogi.util.CrudOperationEnum;
 
 @Service
@@ -35,6 +38,13 @@ public class StrategyUtil {
 	CartRepository cartRepository;
 	@Autowired
 	StockRepository stockRepository;
+	@Autowired
+	PurchaseRepository purchaseRepository;
+	@Autowired
+	TradeRepository tradeRepository;
+
+	@Autowired
+	PurchaseItemRepository purchaseItemRepository;
 
 	public Map<String, Map<CrudOperationEnum, IStrategy>> getStrategies() {
 		// Strategies maps
@@ -44,6 +54,7 @@ public class StrategyUtil {
 		Map<CrudOperationEnum, IStrategy> cartProductMap = new HashMap<>();
 		Map<CrudOperationEnum, IStrategy> purchaseMap = new HashMap<>();
 		Map<CrudOperationEnum, IStrategy> cartMap = new HashMap<>();
+		Map<CrudOperationEnum, IStrategy> tradeMap = new HashMap<>();
 
 		// Strategies Instances
 		AddressValidation addressValidation = new AddressValidation(cityRepository);
@@ -60,6 +71,10 @@ public class StrategyUtil {
 		
 		CartUpdateValidation cartUpdateValidation = new CartUpdateValidation(cartRepository,
 				cartProductUpdateValidation);
+		PurchaseUpdateValidation purchaseUpdateValidation = new PurchaseUpdateValidation(purchaseRepository);
+		
+		TradeValidation tradeValidation = new TradeValidation(purchaseItemRepository);
+		TradeUpdateValidation tradeUpdateValidation = new TradeUpdateValidation(tradeRepository,purchaseItemRepository);
 
 		clientMap.put(CrudOperationEnum.SAVE, clientValidation);
 		clientMap.put(CrudOperationEnum.UPDATE, clientUpdateValidation);
@@ -76,6 +91,11 @@ public class StrategyUtil {
 		cartMap.put(CrudOperationEnum.UPDATE, cartUpdateValidation);
 
 		purchaseMap.put(CrudOperationEnum.SAVE, purchaseValidation);
+		purchaseMap.put(CrudOperationEnum.UPDATE, purchaseUpdateValidation);
+		
+		tradeMap.put(CrudOperationEnum.SAVE, tradeValidation);
+		tradeMap.put(CrudOperationEnum.UPDATE, tradeUpdateValidation);
+		
 		// Filling the lists
 
 		// Strategy map
@@ -88,6 +108,7 @@ public class StrategyUtil {
 		strategiesMap.put("cartproduct", cartProductMap);
 		strategiesMap.put("cart", cartMap);
 		strategiesMap.put("purchase", purchaseMap);
+		strategiesMap.put("trade", tradeMap);
 
 		return strategiesMap;
 	}

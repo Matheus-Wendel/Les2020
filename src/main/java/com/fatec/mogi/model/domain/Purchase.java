@@ -3,19 +3,24 @@ package com.fatec.mogi.model.domain;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fatec.mogi.enumeration.PurchaseStatus;
 import com.fatec.mogi.util.ConstantsUtil;
 
 @Entity
@@ -29,19 +34,25 @@ public class Purchase extends DomainEntity {
 	private double value;
 	@ManyToMany
 	private List<Coupon> tradeCoupons;
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.MERGE)
 	private Coupon promotionalCoupon;
 	@OneToMany
 	private List<PurchaseCard> purchaseCards;
 	@OneToMany
+//	@JsonManagedReference(value = "purchase")
 	private List<PurchaseItem> purchaseItems;
 	@ManyToOne
 	@JoinColumn(name = "client_id", referencedColumnName = "id")
-	@JsonIgnore
+	@JsonIgnoreProperties("purchases")
 	private Client client;
 	@ManyToOne
 	@JoinColumn(name = "address_id", referencedColumnName = "id")
 	private Address deliveryAddress;
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	private PurchaseStatus purchaseStatus;
+	@OneToOne(cascade = CascadeType.PERSIST)
+	private Coupon changeCoupon;
 
 	public Date getPurchaseDate() {
 		return purchaseDate;
@@ -105,6 +116,22 @@ public class Purchase extends DomainEntity {
 
 	public void setDeliveryAddress(Address deliveryAddress) {
 		this.deliveryAddress = deliveryAddress;
+	}
+
+	public PurchaseStatus getPurchaseStatus() {
+		return purchaseStatus;
+	}
+
+	public void setPurchaseStatus(PurchaseStatus purchaseStatus) {
+		this.purchaseStatus = purchaseStatus;
+	}
+
+	public Coupon getChangeCoupon() {
+		return changeCoupon;
+	}
+
+	public void setChangeCoupon(Coupon changeCoupon) {
+		this.changeCoupon = changeCoupon;
 	}
 
 }
