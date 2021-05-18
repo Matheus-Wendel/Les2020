@@ -73,7 +73,7 @@ public class StrategyUtil {
 				cartProductUpdateValidation);
 		PurchaseUpdateValidation purchaseUpdateValidation = new PurchaseUpdateValidation(purchaseRepository);
 		
-		TradeValidation tradeValidation = new TradeValidation(purchaseItemRepository);
+		TradeValidation tradeValidation = new TradeValidation(purchaseItemRepository,purchaseRepository);
 		TradeUpdateValidation tradeUpdateValidation = new TradeUpdateValidation(tradeRepository,purchaseItemRepository);
 
 		clientMap.put(CrudOperationEnum.SAVE, clientValidation);
