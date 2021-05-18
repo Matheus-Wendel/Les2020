@@ -10,4 +10,6 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Integer> {
 
 	
 	List<Purchase> findByClientId(Integer id);
+	Purchase findBypurchaseItemsId(Integer id);
 }
+
