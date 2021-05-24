@@ -5,7 +5,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
@@ -25,7 +24,7 @@ import com.fatec.mogi.util.ConstantsUtil;
 @Entity
 public class Disc extends DomainEntity {
 	@Column(nullable = false)
-	private boolean active;
+	private Boolean active;
 	@Transient
 	private double value;
 	@Transient
@@ -40,9 +39,6 @@ public class Disc extends DomainEntity {
 	private Date releaseDate;
 	@Column(nullable = false)
 	private String name;
-	// TODO CHECK IF THIS ATRIBUTE IS REALLY NEEDED OR CAN BE CHANGED TO AN ENUM
-	@Column(nullable = false)
-	private String status;
 	@OneToOne
 	private ActivationDetails activationDetails;
 	@ManyToMany
@@ -53,15 +49,17 @@ public class Disc extends DomainEntity {
 	private Pricing pricing;
 	@ManyToOne
 	private Recorder recorder;
-	@OneToMany(mappedBy = "disc",cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "disc")
 	@JsonIgnoreProperties("disc")
 	private List<Stock> stock;
 
-	public boolean isActive() {
+
+
+	public Boolean getActive() {
 		return active;
 	}
 
-	public void setActive(boolean active) {
+	public void setActive(Boolean active) {
 		this.active = active;
 	}
 
@@ -89,7 +87,7 @@ public class Disc extends DomainEntity {
 			discPriceProfit = getPricing().getDefautProfit();
 		}
 
-		return discPriceProfit * MaxValuestock.getCostPrice();
+		return MaxValuestock.getCostPrice() + (discPriceProfit * MaxValuestock.getCostPrice());
 	}
 
 	public void setValue(double value) {
@@ -129,13 +127,7 @@ public class Disc extends DomainEntity {
 		this.name = name;
 	}
 
-	public String getStatus() {
-		return status;
-	}
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
 
 	public ActivationDetails getActivationDetails() {
 		return activationDetails;
