@@ -1,4 +1,4 @@
- 	package com.fatec.mogi.facade;
+package com.fatec.mogi.facade;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.fatec.mogi.DAO.IDAO;
 import com.fatec.mogi.DAO.UserDAO;
+import com.fatec.mogi.log.GenerateLog;
 import com.fatec.mogi.model.aplication.Filter;
 import com.fatec.mogi.model.aplication.Result;
 import com.fatec.mogi.model.domain.DomainEntity;
@@ -24,11 +25,13 @@ public class Facade implements IFacade {
 	private Map<String, IDAO> daoMap;
 	private Map<String, Map<CrudOperationEnum, IStrategy>> mapStrategy;
 
+	private GenerateLog log;
+
 	@Autowired
-	public Facade(Map<String, IDAO> daoMap, StrategyUtil util) {
+	public Facade(Map<String, IDAO> daoMap, StrategyUtil util, GenerateLog generateLog) {
 		this.daoMap = daoMap;
 		mapStrategy = util.getStrategies();
-
+		this.log = generateLog;
 		for (String s : mapStrategy.keySet()) {
 			System.err.println(s);
 		}
@@ -50,7 +53,9 @@ public class Facade implements IFacade {
 		if (!validationResultMap.isEmpty()) {
 			return new Result(validationResultMap, null, true);
 		}
-		return getDAO(filter).save(filter);
+		Result save = getDAO(filter).save(filter);
+		log.GerarLog(filter.getEntity(), CrudOperationEnum.SAVE);
+		return save;
 	}
 
 	@Override
@@ -60,7 +65,9 @@ public class Facade implements IFacade {
 		if (!validationResultMap.isEmpty()) {
 			return new Result(validationResultMap, null, true);
 		}
-		return getDAO(filter).update(filter);
+		Result update = getDAO(filter).update(filter);
+		log.GerarLog(filter.getEntity(), CrudOperationEnum.UPDATE);
+		return update;
 	}
 
 	@Override
@@ -70,7 +77,9 @@ public class Facade implements IFacade {
 		if (!validationResultMap.isEmpty()) {
 			return new Result(validationResultMap, null, true);
 		}
-		return getDAO(filter).delete(filter);
+		Result delete = getDAO(filter).delete(filter);
+		log.GerarLog(filter.getEntity(), CrudOperationEnum.DELETE);
+		return delete;
 	}
 
 	private IDAO getDAO(Filter<? extends DomainEntity> filter) {
