@@ -13,6 +13,7 @@ import com.fatec.mogi.repository.CityRepository;
 import com.fatec.mogi.repository.ClientRepository;
 import com.fatec.mogi.repository.CreditCardRepository;
 import com.fatec.mogi.repository.DiscRepository;
+import com.fatec.mogi.repository.PricingRepository;
 import com.fatec.mogi.repository.PurchaseItemRepository;
 import com.fatec.mogi.repository.PurchaseRepository;
 import com.fatec.mogi.repository.StockRepository;
@@ -45,6 +46,9 @@ public class StrategyUtil {
 
 	@Autowired
 	PurchaseItemRepository purchaseItemRepository;
+	
+	@Autowired 
+	PricingRepository pricingRepository;
 
 	public Map<String, Map<CrudOperationEnum, IStrategy>> getStrategies() {
 		// Strategies maps
@@ -55,6 +59,10 @@ public class StrategyUtil {
 		Map<CrudOperationEnum, IStrategy> purchaseMap = new HashMap<>();
 		Map<CrudOperationEnum, IStrategy> cartMap = new HashMap<>();
 		Map<CrudOperationEnum, IStrategy> tradeMap = new HashMap<>();
+		Map<CrudOperationEnum, IStrategy> pricingMap = new HashMap<>();
+		Map<CrudOperationEnum, IStrategy> saleMap = new HashMap<>();
+		Map<CrudOperationEnum, IStrategy> discMap = new HashMap<>();
+		Map<CrudOperationEnum, IStrategy> stockMap = new HashMap<>();
 
 		// Strategies Instances
 		AddressValidation addressValidation = new AddressValidation(cityRepository);
@@ -65,7 +73,7 @@ public class StrategyUtil {
 		CartProductDeleteValidation cartProductDeleteValidation = new CartProductDeleteValidation(discRepository,
 				cartProductRepository);
 		
-		PurchaseValidation purchaseValidation = new PurchaseValidation(creditCardRepository);
+		PurchaseValidation purchaseValidation = new PurchaseValidation(creditCardRepository,discRepository);
 		CartProductUpdateValidation cartProductUpdateValidation = new CartProductUpdateValidation(discRepository,
 				cartProductRepository, stockRepository, clientRepository);
 		
@@ -75,6 +83,16 @@ public class StrategyUtil {
 		
 		TradeValidation tradeValidation = new TradeValidation(purchaseItemRepository,purchaseRepository);
 		TradeUpdateValidation tradeUpdateValidation = new TradeUpdateValidation(tradeRepository,purchaseItemRepository);
+		
+		PricingValidation pricingValidation = new PricingValidation();
+		PricingUpdateValidation pricingUpdateValidation = new PricingUpdateValidation(pricingRepository);
+		
+		SaleUpdateValidation saleUpdateValidation = new SaleUpdateValidation(pricingRepository);
+		
+		DiscValidation discValidation = new DiscValidation();
+		DiscUpdateValidation discUpdateValidation = new DiscUpdateValidation(discRepository);
+		
+		StockValidation stockValidation = new StockValidation(discRepository);
 
 		clientMap.put(CrudOperationEnum.SAVE, clientValidation);
 		clientMap.put(CrudOperationEnum.UPDATE, clientUpdateValidation);
@@ -96,6 +114,16 @@ public class StrategyUtil {
 		tradeMap.put(CrudOperationEnum.SAVE, tradeValidation);
 		tradeMap.put(CrudOperationEnum.UPDATE, tradeUpdateValidation);
 		
+		pricingMap.put(CrudOperationEnum.SAVE, pricingValidation);
+		pricingMap.put(CrudOperationEnum.UPDATE, pricingUpdateValidation);
+
+		saleMap.put(CrudOperationEnum.UPDATE, saleUpdateValidation);
+		
+		discMap.put(CrudOperationEnum.SAVE, discValidation);
+		discMap.put(CrudOperationEnum.UPDATE, discUpdateValidation);
+		
+		stockMap.put(CrudOperationEnum.SAVE, stockValidation);
+		
 		// Filling the lists
 
 		// Strategy map
@@ -109,6 +137,10 @@ public class StrategyUtil {
 		strategiesMap.put("cart", cartMap);
 		strategiesMap.put("purchase", purchaseMap);
 		strategiesMap.put("trade", tradeMap);
+		strategiesMap.put("pricing", pricingMap);
+		strategiesMap.put("sale", saleMap);
+		strategiesMap.put("disc", discMap);
+		strategiesMap.put("stock", stockMap);
 
 		return strategiesMap;
 	}
