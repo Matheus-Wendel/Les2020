@@ -1,6 +1,6 @@
 package com.fatec.mogi.enumeration;
 
 public enum SaleStatusEnum {
-	ACTIVE,INATIVE,WAITING_CONFIRMATION
+	ACTIVE,INACTIVE,WAITING_CONFIRMATION
 
 }
