@@ -11,6 +11,7 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fatec.mogi.util.ConstantsUtil;
 
 @Entity
@@ -25,6 +26,7 @@ public class Stock extends DomainEntity {
 	@Column(nullable = false)
 	@DateTimeFormat(pattern = ConstantsUtil.TIMESTAMP_FORMAT)
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(pattern = ConstantsUtil.TIMESTAMP_FORMAT)
 	private Date purchaceDate;
 
 	public int getQuantity() {
