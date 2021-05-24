@@ -9,20 +9,25 @@ import java.util.List;
 import com.fatec.mogi.auth.AuthUtils;
 import com.fatec.mogi.enumeration.CouponTypeEnum;
 import com.fatec.mogi.enumeration.PurchaseStatus;
+import com.fatec.mogi.model.domain.ActivationDetails;
 import com.fatec.mogi.model.domain.CartProduct;
 import com.fatec.mogi.model.domain.Coupon;
+import com.fatec.mogi.model.domain.Disc;
 import com.fatec.mogi.model.domain.DomainEntity;
 import com.fatec.mogi.model.domain.Purchase;
 import com.fatec.mogi.model.domain.PurchaseCard;
 import com.fatec.mogi.model.domain.PurchaseItem;
 import com.fatec.mogi.repository.CreditCardRepository;
+import com.fatec.mogi.repository.DiscRepository;
 
 public class PurchaseValidation implements IStrategy {
 
 	CreditCardRepository creditCardRepository;
+	private DiscRepository discRepository;
 
-	public PurchaseValidation(CreditCardRepository creditCardRepository) {
+	public PurchaseValidation(CreditCardRepository creditCardRepository, DiscRepository discRepository) {
 		this.creditCardRepository = creditCardRepository;
+		this.discRepository = discRepository;
 	}
 
 	@Override
@@ -124,6 +129,15 @@ public class PurchaseValidation implements IStrategy {
 
 		List<PurchaseItem> purchaseItems = new ArrayList<>();
 		for (CartProduct cartProduct : cartProducts) {
+			var disc = cartProduct.getDisc();
+			Disc dbDisc = discRepository.findById(disc.getId()).get();
+			if(dbDisc.getTotalStock()==0) {
+				ActivationDetails activationDetails = dbDisc.getActivationDetails();
+				disc.setActive(false);
+				activationDetails.setCategory("FORA DE MERCADO");
+				activationDetails.setMotive("INATIVAÇÂO AUTOMATICA");
+				disc.setActivationDetails(activationDetails);
+			}
 		//TODO ENUM REMOVIDO DE ITEM DE COMPRA , TROCAR CONSTRUTOR COM INSTACIA DE TROCA	
 			for (int i = 0; i < cartProduct.getQuantity(); i++) {
 				purchaseItems.add(new PurchaseItem( cartProduct.getDisc(),cartProduct.getDisc().getValue()));
