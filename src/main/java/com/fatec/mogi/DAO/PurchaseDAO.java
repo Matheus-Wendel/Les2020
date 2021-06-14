@@ -1,6 +1,11 @@
 package com.fatec.mogi.DAO;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -49,6 +54,28 @@ public class PurchaseDAO extends AbstractDAO<Purchase> {
 	public Result find(Filter<? extends DomainEntity> filter) {
 		var loggedUser = AuthUtils.getLoggedUser();
 		if (loggedUser.getPermission() != PermissionEnum.CLIENT) {
+			Map<String, String> allparameters = filter.getParameters();
+			Map<String, String> parameters = new HashMap<String, String>();
+
+			allparameters.forEach((key, value) -> {
+				if (!value.isBlank()) {
+					parameters.put(key, value);
+				}
+			});
+
+			if (parameters.containsKey("startDate") && parameters.containsKey("endDate")) {
+				try {
+					Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(parameters.get("startDate"));
+					Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse(parameters.get("endDate"));
+					Result result = new Result();
+					result.setResultList(
+							this.purchaseRepository.findByPurchaseDateBetweenOrderByPurchaseDateAsc(startDate, endDate));
+					return result;
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			return super.find(filter);
 		}
 		Result result = new Result();
