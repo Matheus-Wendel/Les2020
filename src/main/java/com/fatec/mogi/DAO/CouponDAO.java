@@ -42,6 +42,11 @@ public class CouponDAO extends AbstractDAO<Coupon> {
 		}
 		var loggedUser = AuthUtils.getLoggedUser();
 		if(loggedUser.getPermission()!=PermissionEnum.CLIENT) {
+			if (parameters.containsKey("promotional")) {
+				List<Coupon> findByType = this.couponRepository.findByType(CouponTypeEnum.PROMOTIONAL);
+				result.setResultList(findByType);
+				return result;
+			}
 			return super.find(filter);
 		}
 		Client loggedClient = AuthUtils.getLoggedClient();

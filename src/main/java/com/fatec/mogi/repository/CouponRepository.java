@@ -10,8 +10,11 @@ import com.fatec.mogi.model.domain.Coupon;
 
 public interface CouponRepository extends JpaRepository<Coupon, Integer> {
 
-	
-	List<Coupon> findByCodeAndTypeAndExpirationDateAfter(String code,CouponTypeEnum type, Date expirationDate);
-	
-	List<Coupon> findByClientIdAndTypeAndExpirationDateAfter(Integer id,CouponTypeEnum type, Date expirationDate);
+	List<Coupon> findByCodeAndTypeAndExpirationDateAfter(String code, CouponTypeEnum type, Date expirationDate);
+
+	List<Coupon> findByType(CouponTypeEnum type);
+
+	Coupon findByCode(String code);
+
+	List<Coupon> findByClientIdAndTypeAndExpirationDateAfter(Integer id, CouponTypeEnum type, Date expirationDate);
 }
