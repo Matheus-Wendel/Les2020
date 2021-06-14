@@ -10,6 +10,8 @@ import com.fatec.mogi.model.domain.User;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
 	User findByEmail(String email);
+	@Query("SELECT u FROM User u WHERE u.email = :email and u.active=1")
+	User findActiveByEmail(@Param("email")String email);
 	
 	@Modifying(clearAutomatically = true)
 	@Query("update User u set u.active=0 where u.id= :id")
