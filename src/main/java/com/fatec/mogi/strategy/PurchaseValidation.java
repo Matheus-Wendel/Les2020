@@ -40,7 +40,8 @@ public class PurchaseValidation implements IStrategy {
 			sb.append("Carrinho de compras vazio;;");
 			return sb.toString();
 		}
-		if (purchase.getPurchaseCards().isEmpty() && purchase.getTradeCoupons().isEmpty() && purchase.getPromotionalCoupon().getId()==null ) {
+		if (purchase.getPurchaseCards().isEmpty() && purchase.getTradeCoupons().isEmpty()
+				&& purchase.getPromotionalCoupon().getId() == null) {
 			sb.append("Nenhuma forma de pagamento selecionada;;");
 		}
 		if (purchase.getDeliveryAddress() == null) {
@@ -50,7 +51,7 @@ public class PurchaseValidation implements IStrategy {
 			for (PurchaseCard purchaseCard : purchase.getPurchaseCards()) {
 				var card = creditCardRepository.findById(purchaseCard.getCreditCard().getId());
 				if (card.isPresent()) {
-					if (!card.get().isVailid()) {
+					if (card.get().getCardBrand().getDescription().equals("American Express")) {
 						sb.append("O Cartão bandeira: " + card.get().getCardBrand().getDescription() + " é invalido;;");
 						break;
 					}
@@ -69,7 +70,7 @@ public class PurchaseValidation implements IStrategy {
 		}
 		double valueInCoupons = valueInTradeCoupons + valueInPromotionalCoupon;
 		// VALOR EM CUPOM MAIOR QUE O DA COMPRA
-		if (purchaseValue - valueInCoupons<= 0) {
+		if (purchaseValue - valueInCoupons <= 0) {
 			if (!purchase.getPurchaseCards().isEmpty()) {
 				sb.append("Valor pago em cupons igual ou superior ao valor da compra, remova os cartões da compra;;");
 				return sb.toString();
@@ -80,7 +81,7 @@ public class PurchaseValidation implements IStrategy {
 				return sb.toString();
 			}
 			double exchangeCouponValue = purchaseValue - valueInTradeCoupons - valueInPromotionalCoupon;
-			if (valueInTradeCoupons != 0) {
+			if (valueInTradeCoupons != 0 && exchangeCouponValue != 0) {
 
 				Coupon c = new Coupon();
 				c.setActive(true);
@@ -93,34 +94,34 @@ public class PurchaseValidation implements IStrategy {
 				c.setExpirationDate(expirationDate);
 				c.setClient(client);
 				purchase.setChangeCoupon(c);
-				
-				
+
 			}
 
-		}else {
-			//VALOR EM CUPOM MENOR QUE O DA COMPRA
+		} else {
+			// VALOR EM CUPOM MENOR QUE O DA COMPRA
 			double paymentInCard = purchaseValue - valueInCoupons;
-			if(purchase.getPurchaseCards().isEmpty() ) {
+			if (purchase.getPurchaseCards().isEmpty()) {
 				sb.append("Valor em cupons não é sufuciente para finalizar a compra, adicione um cartão a compra;;");
 				return sb.toString();
 			}
-			
-			if(paymentInCard<=10  &&purchase.getPurchaseCards().size()>=2) {
+
+			if (paymentInCard <= 10 && purchase.getPurchaseCards().size() >= 2) {
 				sb.append("Valor minimo por cartão é R$10, remova cartões da compra;;");
 				return sb.toString();
 			}
 			double valueSum = purchase.getPurchaseCards().stream().mapToDouble(s -> s.getValue()).sum();
-			
-			if(valueSum>purchaseValue) {
-				sb.append("Valor definido para os cartões excede o valor total da compra, revise os valores por cartão;;");
+
+			if (valueSum > purchaseValue) {
+				sb.append(
+						"Valor definido para os cartões excede o valor total da compra, revise os valores por cartão;;");
 				return sb.toString();
 			}
-			
-			if(valueSum<purchaseValue) {
+
+			if (valueSum < purchaseValue) {
 				var firstCard = purchase.getPurchaseCards().get(0);
-				firstCard.setValue(firstCard.getValue() + purchaseValue - valueSum-valueInCoupons);
+				firstCard.setValue(firstCard.getValue() + purchaseValue - valueSum - valueInCoupons);
 			}
-			
+
 		}
 		if (sb.length() > 0) {
 			return sb.toString();
@@ -131,21 +132,22 @@ public class PurchaseValidation implements IStrategy {
 		for (CartProduct cartProduct : cartProducts) {
 			var disc = cartProduct.getDisc();
 			Disc dbDisc = discRepository.findById(disc.getId()).get();
-			if(dbDisc.getTotalStock()==0) {
+			if (dbDisc.getTotalStock() == 0) {
 				ActivationDetails activationDetails = dbDisc.getActivationDetails();
 				disc.setActive(false);
 				activationDetails.setCategory("FORA DE MERCADO");
 				activationDetails.setMotive("INATIVAÇÂO AUTOMATICA");
 				disc.setActivationDetails(activationDetails);
 			}
-		//TODO ENUM REMOVIDO DE ITEM DE COMPRA , TROCAR CONSTRUTOR COM INSTACIA DE TROCA	
+			// TODO ENUM REMOVIDO DE ITEM DE COMPRA , TROCAR CONSTRUTOR COM INSTACIA DE
+			// TROCA
 			for (int i = 0; i < cartProduct.getQuantity(); i++) {
-				purchaseItems.add(new PurchaseItem( cartProduct.getDisc(),cartProduct.getDisc().getValue()));
+				purchaseItems.add(new PurchaseItem(cartProduct.getDisc(), cartProduct.getDisc().getValue()));
 
 			}
 
 		}
-		if(purchase.getPromotionalCoupon().getId()==null) {
+		if (purchase.getPromotionalCoupon().getId() == null) {
 			purchase.setPromotionalCoupon(null);
 		}
 

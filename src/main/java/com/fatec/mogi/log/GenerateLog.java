@@ -34,7 +34,7 @@ public class GenerateLog {
 		log.setOperationDate(new Date());
 		logrepository.save(log);
 
-		System.err.println(log.getUser().getEmail());
+//		System.err.println(log.getUser().getEmail());
 	}
 
 

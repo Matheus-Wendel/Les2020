@@ -96,7 +96,9 @@ public class DiscDAO extends AbstractDAO<Disc> {
 					.withMatcher("name",new GenericPropertyMatcher().contains()).withIgnoreCase()
 					.withMatcher("description",new GenericPropertyMatcher().contains()).withIgnoreCase();
 			
+			
 			Example<Disc> example = Example.of(disc, matcher);
+			
 			result.setResultList(discRepository.findAll(example));
 			return result;
 		} catch (Exception e) {

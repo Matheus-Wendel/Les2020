@@ -11,6 +11,7 @@ import com.fatec.mogi.model.domain.DomainEntity;
 import com.fatec.mogi.util.MessagesUtil;
 
 @SuppressWarnings("unchecked")
+// https://stackoverflow.com/questions/32728843/spring-data-optional-parameter-in-query-method
 public abstract class AbstractDAO<T extends DomainEntity> implements IDAO {
 	protected JpaRepository<T, Integer> repository;
 
@@ -91,7 +92,7 @@ public abstract class AbstractDAO<T extends DomainEntity> implements IDAO {
 			if (repository.existsById(entity.getId())) {
 				repository.deleteById(entity.getId());
 				result.getMessages().put(MessagesUtil.DELETED, "id: " + entity.getId());
-				
+
 			} else {
 				result.getMessages().put(MessagesUtil.NOT_FOUND, "id: " + entity.getId());
 			}

@@ -23,7 +23,6 @@ public class DiscController extends AbstractController<Disc> {
 	@SuppressWarnings("rawtypes")
 	@GetMapping(path = "/{name}")
 	public ResponseEntity find( @PathVariable(name = "name") String name) {
-		System.err.println(name);
 		var disc = new Disc();
 		disc.setName(name);
 		Filter<Disc> filter =new Filter<Disc>(disc,this.clazz);
