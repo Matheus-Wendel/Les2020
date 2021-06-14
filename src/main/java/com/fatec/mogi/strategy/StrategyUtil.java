@@ -11,8 +11,10 @@ import com.fatec.mogi.repository.CartProductRepository;
 import com.fatec.mogi.repository.CartRepository;
 import com.fatec.mogi.repository.CityRepository;
 import com.fatec.mogi.repository.ClientRepository;
+import com.fatec.mogi.repository.CouponRepository;
 import com.fatec.mogi.repository.CreditCardRepository;
 import com.fatec.mogi.repository.DiscRepository;
+import com.fatec.mogi.repository.EmployeeRepository;
 import com.fatec.mogi.repository.PricingRepository;
 import com.fatec.mogi.repository.PurchaseItemRepository;
 import com.fatec.mogi.repository.PurchaseRepository;
@@ -49,6 +51,12 @@ public class StrategyUtil {
 	
 	@Autowired 
 	PricingRepository pricingRepository;
+	
+	@Autowired 
+	EmployeeRepository employeeRepository;
+	
+	@Autowired
+	CouponRepository couponRepository;
 
 	public Map<String, Map<CrudOperationEnum, IStrategy>> getStrategies() {
 		// Strategies maps
@@ -63,6 +71,8 @@ public class StrategyUtil {
 		Map<CrudOperationEnum, IStrategy> saleMap = new HashMap<>();
 		Map<CrudOperationEnum, IStrategy> discMap = new HashMap<>();
 		Map<CrudOperationEnum, IStrategy> stockMap = new HashMap<>();
+		Map<CrudOperationEnum, IStrategy> employeeMap  = new HashMap<>();
+		Map<CrudOperationEnum, IStrategy> couponMap  = new HashMap<>();
 
 		// Strategies Instances
 		AddressValidation addressValidation = new AddressValidation(cityRepository);
@@ -93,6 +103,12 @@ public class StrategyUtil {
 		DiscUpdateValidation discUpdateValidation = new DiscUpdateValidation(discRepository);
 		
 		StockValidation stockValidation = new StockValidation(discRepository);
+		
+		EmployeeValidation employeeValidation = new EmployeeValidation();
+		
+		EmployeeUpdateValidation employeeUpdateValidation = new EmployeeUpdateValidation(employeeRepository);
+		
+		CouponValidation couponValidation = new CouponValidation(couponRepository);
 
 		clientMap.put(CrudOperationEnum.SAVE, clientValidation);
 		clientMap.put(CrudOperationEnum.UPDATE, clientUpdateValidation);
@@ -124,6 +140,13 @@ public class StrategyUtil {
 		
 		stockMap.put(CrudOperationEnum.SAVE, stockValidation);
 		
+		employeeMap.put(CrudOperationEnum.SAVE, employeeValidation);
+		employeeMap.put(CrudOperationEnum.UPDATE, employeeUpdateValidation);
+		
+		
+		couponMap.put(CrudOperationEnum.SAVE, couponValidation);
+		couponMap.put(CrudOperationEnum.UPDATE, couponValidation);
+
 		// Filling the lists
 
 		// Strategy map
@@ -141,6 +164,8 @@ public class StrategyUtil {
 		strategiesMap.put("sale", saleMap);
 		strategiesMap.put("disc", discMap);
 		strategiesMap.put("stock", stockMap);
+		strategiesMap.put("employee", employeeMap);
+		strategiesMap.put("coupon", couponMap);
 
 		return strategiesMap;
 	}
