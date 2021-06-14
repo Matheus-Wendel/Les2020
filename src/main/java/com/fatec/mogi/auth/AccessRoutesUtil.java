@@ -24,9 +24,14 @@ public class AccessRoutesUtil {
 	
 	
 	//employee only
-	public static final String[] GET_EMPLOYEE_ACCESS_ROUTES = {"/purchase/all","/trade"};
-	public static final String[] POST_EMPLOYEE_ACCESS_ROUTES = { "/disc", "/artist", "/genre","/recorder","/pricing","/stock","/sale","/employee"};
-	public static final String[] PUT_EMPLOYEE_ACCESS_ROUTES = { "/disc", "/artist", "/genre","/recorder","/pricing","/sale","/employee","/purchase","/trade"};
+	public static final String[] GET_EMPLOYEE_ACCESS_ROUTES = {"/purchase/all","/trade","/employee/me"};
+	public static final String[] POST_EMPLOYEE_ACCESS_ROUTES = { "/disc", "/artist", "/genre","/recorder","/pricing","/stock","/sale"};
+	public static final String[] PUT_EMPLOYEE_ACCESS_ROUTES = { "/disc", "/artist", "/genre","/recorder","/pricing","/purchase","/trade"};
 	public static final String[] DELETE_EMPLOYEE_ACCESS_ROUTES = { "/disc", "/artist", "/genre","/recorder","/pricing","/sale"};
 
+	//sales mananger only
+	public static final String[] GET_SALES_MANANGER_ACCESS_ROUTES = {"/employee"};
+	public static final String[] POST_SALES_MANANGER_ACCESS_ROUTES = {"/employee","/coupon"};
+	public static final String[] PUT_SALES_MANANGER_ACCESS_ROUTES = {"/employee","/sale","/coupon",};
+	public static final String[] DELETE_SALES_MANANGER_ACCESS_ROUTES = {"/employee"};
 }

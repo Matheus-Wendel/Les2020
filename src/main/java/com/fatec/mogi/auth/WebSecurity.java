@@ -27,19 +27,29 @@ public class WebSecurity extends WebSecurityConfigurerAdapter{
 	    @Override
 	    protected void configure(HttpSecurity http) throws Exception {
 	        http.cors().and().csrf().disable().authorizeRequests()
+	        		//free
 	                .antMatchers(HttpMethod.POST, "/client").permitAll()
 	                .antMatchers(HttpMethod.GET, AccessRoutesUtil.GET_FREE_ACCESS_ROUTES).permitAll()
+	                //client 
 	                .antMatchers(HttpMethod.POST, AccessRoutesUtil.POST_CLIENT_ACCESS_ROUTES).hasAuthority(PermissionEnum.CLIENT.name())
 	                .antMatchers(HttpMethod.GET, AccessRoutesUtil.GET_CLIENT_ACCESS_ROUTES).hasAuthority(PermissionEnum.CLIENT.name())
 	                .antMatchers(HttpMethod.PUT, AccessRoutesUtil.PUT_CLIENT_ACCESS_ROUTES).hasAuthority(PermissionEnum.CLIENT.name())
 	                .antMatchers(HttpMethod.DELETE, AccessRoutesUtil.DELETE_CLIENT_ACCESS_ROUTES).hasAuthority(PermissionEnum.CLIENT.name())
+	                //employee and sales mananger
+	                .antMatchers(HttpMethod.GET, AccessRoutesUtil.GET_EMPLOYEE_ACCESS_ROUTES).hasAnyAuthority(PermissionEnum.EMPLOYEE.name(),PermissionEnum.SALES_MANAGER.name())
 	                .antMatchers(HttpMethod.POST, AccessRoutesUtil.POST_EMPLOYEE_ACCESS_ROUTES).hasAnyAuthority(PermissionEnum.EMPLOYEE.name(),PermissionEnum.SALES_MANAGER.name())
 	                .antMatchers(HttpMethod.PUT, AccessRoutesUtil.PUT_EMPLOYEE_ACCESS_ROUTES).hasAnyAuthority(PermissionEnum.EMPLOYEE.name(),PermissionEnum.SALES_MANAGER.name())
+	                //sales mananger
+	                .antMatchers(HttpMethod.GET, AccessRoutesUtil.GET_SALES_MANANGER_ACCESS_ROUTES).hasAnyAuthority(PermissionEnum.SALES_MANAGER.name())
+	                .antMatchers(HttpMethod.POST, AccessRoutesUtil.POST_SALES_MANANGER_ACCESS_ROUTES).hasAnyAuthority(PermissionEnum.SALES_MANAGER.name())
+	                .antMatchers(HttpMethod.PUT, AccessRoutesUtil.PUT_SALES_MANANGER_ACCESS_ROUTES).hasAnyAuthority(PermissionEnum.SALES_MANAGER.name())
+	                //h2
 	                .antMatchers("/h2-console").permitAll()
 	                .antMatchers("/h2-console/**").permitAll()
 	                .anyRequest().authenticated()
 	                .and()
-					.addFilter(new JWTAuthenticationFilter(authenticationManager()))
+					 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
+//					 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
 					.addFilter(new JWTAuthorizationFilter(authenticationManager()))
 	                // this disables session creation on Spring Security
 	                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
