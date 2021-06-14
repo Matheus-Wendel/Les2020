@@ -7,12 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import org.hibernate.annotations.Where;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Where(clause = "active=1")
 public class Client extends Person {
 	@Column(nullable = false)
 	private String genre;

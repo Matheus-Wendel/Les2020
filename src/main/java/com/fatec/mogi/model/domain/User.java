@@ -5,16 +5,13 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
-import org.hibernate.annotations.Where;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fatec.mogi.enumeration.PermissionEnum;
 
 @Entity
-@Where(clause = "active=1")
 public class User extends DomainEntity {
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String email;
 	@Column(nullable = false)
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
