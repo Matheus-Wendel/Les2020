@@ -5749,9 +5749,7 @@ INSERT INTO GENRE VALUES
 
 INSERT INTO PRICING VALUES
 (65, 4.0, 'Vinis Importados', 2.0, 66),
-(68, 2.5, 'CDs Importados', 1.3, 69),
-(71, 2.0, 'Vinis Nacionais', 1.0, 72),
-(74, 1.0, 'CDs Nacionais', 0.5, 75);           
+(68, 2.5, 'CDs Importados', 1.3, 69);    
       
  
 INSERT INTO DISC VALUES
